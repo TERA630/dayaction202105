@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">dayaction202105</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    　　
+    <string name="date_Reiwa">令和%1$s年%2$s月%3$s日</string>
+    <string name="save">保存</string>
+    <string name="cancel">破棄</string>
+
+    <!-- メニューアイテム-->
+    <string name="menu_routineOfTheDay">曜日ごとのルーチン作業を登録</string>
+    <string name="menu_actionOfTheDay">日ごとのTODOを追加</string>
+    <string name="menu_customToGet">つけたい習慣を登録する</string>
+    <string name="testDate">2021年5月19日(木)</string>
+    <string name="testItem">気づきをメモする</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array
+            name="default_item_list">
+        <item>本日の記録;30;Daily</item>
+        <item>明日の一日の予定;30;Daily</item>
+        <item>腕立て20;30;Daily</item>
+        <item>腹筋20;30;Daily</item>
+        </string-array>
+</resources>
