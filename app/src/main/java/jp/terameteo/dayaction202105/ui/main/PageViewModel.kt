@@ -24,11 +24,12 @@ class PageViewModel : ViewModel() {
         for(i in itemsString.indices){
             defaultItems.add(convertStringToItem(itemsString[i]))
         }
-        currentItems.clear()
-        currentItems.addAll(defaultItems)
+         currentItems.clear()
+         currentItems.addAll(defaultItems)
+
     }
     fun loadItems(_context:Context){
-        val appDatabase = Room.databaseBuilder(_context,AppDatabase::class.java,"database-name")
+        val appDatabase = Room.databaseBuilder(_context,AppDatabase::class.java,"AppDatabase")
             .build()
         val userDao = appDatabase.userDao()
     }
