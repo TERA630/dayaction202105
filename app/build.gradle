@@ -17,14 +17,14 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         debug {
             ext.enableCrashlytics = false
             minifyEnabled false
-
         }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -37,9 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        viewBinding true
-    }
+
 }
 
 dependencies {
@@ -53,6 +51,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.3.4'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta02'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.2.0"
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     // lifecycle

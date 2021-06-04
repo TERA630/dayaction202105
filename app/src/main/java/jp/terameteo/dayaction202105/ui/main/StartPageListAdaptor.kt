@@ -1,14 +1,13 @@
 package jp.terameteo.dayaction202105.ui.main
 
 import android.view.LayoutInflater
-import android.view.View
+
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.terameteo.dayaction202105.ItemEntity
-import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 
 class StartPageListAdaptor (private val viewLifecycleOwner: LifecycleOwner, private val viewModel: PageViewModel):
@@ -21,11 +20,9 @@ class StartPageListAdaptor (private val viewLifecycleOwner: LifecycleOwner, priv
     }
     class ViewHolderOfCell(private val binding:ItemTestBinding) : RecyclerView.ViewHolder(binding.root) {
         val textView: TextView = binding.cellText
-
-
     }
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
-        val thisPositionViewHolder = holder as ViewHolderOfCell
+        val thisPositionViewHolder = holder
         val thisPositionView = thisPositionViewHolder.textView
         thisPositionView.text =  viewModel.currentItems[position].title
     }

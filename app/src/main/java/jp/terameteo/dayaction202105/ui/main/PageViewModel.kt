@@ -1,10 +1,8 @@
 package jp.terameteo.dayaction202105.ui.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import jp.terameteo.dayaction202105.AppDatabase
 import jp.terameteo.dayaction202105.ItemEntity
@@ -15,9 +13,7 @@ class PageViewModel : ViewModel() {
     var currentDateStr = "2021/5/30"
     val currentItems = mutableListOf<ItemEntity>()
     private val _index = MutableLiveData<Int>()
-    val text: LiveData<String> = Transformations.map(_index) {
-        "Hello world from section: $it"
-    }
+
     fun makeDefaultItems(_context: Context){
         val itemsString = _context.resources.getStringArray(R.array.default_item_list)
         val defaultItems = mutableListOf<ItemEntity>()
@@ -40,7 +36,7 @@ class PageViewModel : ViewModel() {
     fun convertItemToString(itemEntity: ItemEntity): String { // ItemEntity が変われば直す必要あり
         return itemEntity.title + ";" + itemEntity.reward + ";" + itemEntity.category
     }
-    fun convertStringToItem(_string: String): ItemEntity {
+    private fun convertStringToItem(_string: String): ItemEntity {
         val elementList = _string.split(";").toMutableList()
         for (i in elementList.indices) {
             if (elementList[i] == "") {

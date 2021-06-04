@@ -1,6 +1,6 @@
 package jp.terameteo.dayaction202105
 
-import androidx.lifecycle.MutableLiveData
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

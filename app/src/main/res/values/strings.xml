@@ -7,7 +7,7 @@
     <string name="date_placeHolder">%1$s年%2$s月%3$s日</string>
     <string name="save">保存</string>
     <string name="cancel">破棄</string>
-
+    <string name="press_to_append">Press to append item</string>
     <!-- メニューアイテム-->
     <string name="menu_routineOfTheDay">曜日ごとのルーチン作業を登録</string>
     <string name="menu_actionOfTheDay">日ごとのTODOを追加</string>

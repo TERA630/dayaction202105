@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.google.android.flexbox.*
-import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
 
 class PlaceholderFragment : Fragment() {
@@ -33,15 +30,10 @@ class PlaceholderFragment : Fragment() {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
-        val sectionLabelText: TextView = binding.sectionLabel
-        pageViewModel.text.observe(viewLifecycleOwner, Observer {
-            sectionLabelText.text = it
-        })
-        val dateLabelText = binding.labelDate
-         dateLabelText.text = this.requireContext().getString(R.string.date_placeHolder,"2021","6","3")
 
 
-        val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply{
+
+        val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
             justifyContent = JustifyContent.FLEX_START
@@ -59,15 +51,12 @@ class PlaceholderFragment : Fragment() {
         return root
     }
 
+
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
         @JvmStatic
-        fun newInstance(sectionNumber: Int): PlaceholderFragment {
-            return PlaceholderFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_SECTION_NUMBER, sectionNumber)
-                }
-            }
+        fun newInstance(): PlaceholderFragment {
+            return PlaceholderFragment()
         }
     }
 
