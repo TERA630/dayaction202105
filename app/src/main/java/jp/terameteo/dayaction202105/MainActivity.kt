@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
         val tabLayout: TabLayout = binding.tabLayout
-        val mediator = TabLayoutMediator(tabLayout,viewPager) { tab, position -> tab.text = "Tab {$position + 1}"}
+        val mediator = TabLayoutMediator(tabLayout,viewPager) { tab, position -> tab.text = "Tab  $position "}
         mediator.attach()
         val fab: FloatingActionButton = binding.fab
 
