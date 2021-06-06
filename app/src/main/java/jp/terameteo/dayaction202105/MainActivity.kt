@@ -9,6 +9,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
+// TODO クリック時のイベント
+// TODO 自動カテゴリ分け タブ作成
+// TODO ROOM 実装
+// TODO
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -20,11 +26,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val dateLabelText = binding.labelDate
-        dateLabelText.text = getString(R.string.date_placeHolder,"2021","6","3")
+        val secretary = DataSecretary()
+        dateLabelText.text =
+            secretary.getTodayString() //  getString(R.string.date_placeHolder,"2021","6","3")
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
         val tabLayout: TabLayout = binding.tabLayout
-        val mediator = TabLayoutMediator(tabLayout,viewPager) { tab, position -> tab.text = "Tab  $position "}
+        val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = "Tab  $position "
+        }
         mediator.attach()
         val fab: FloatingActionButton = binding.fab
 

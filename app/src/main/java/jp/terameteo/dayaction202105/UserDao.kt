@@ -4,20 +4,20 @@ import androidx.room.*
 
 @Dao
  interface UserDao {
-        @Insert
-        fun insert(user : ItemEntity)
+    @Insert
+    fun insert(user: StoredItemEntity)
 
-        @Update
-        fun update(user : ItemEntity)
+    @Update
+    fun update(user: StoredItemEntity)
 
-        @Delete
-        fun delete(user : ItemEntity)
+    @Delete
+    fun delete(user: StoredItemEntity)
 
-        @Query("select * from ItemEntity")
-        fun selectAll():List<ItemEntity>
- }
+    @Query("select * from StoredItemEntity")
+    fun selectAll(): List<StoredItemEntity>
+}
 
-@Database(entities = [ItemEntity::class], version = 1)
+@Database(entities = [StoredItemEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }

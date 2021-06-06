@@ -9,9 +9,9 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.flexbox.*
 import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
 
-class PlaceholderFragment : Fragment() {
+class MainFragment : Fragment() {
 
-    private val pageViewModel:PageViewModel by activityViewModels()
+    private val pageViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
 
     // This property is only valid between onCreateView and
@@ -54,9 +54,10 @@ class PlaceholderFragment : Fragment() {
 
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
+
         @JvmStatic
-        fun newInstance(): PlaceholderFragment {
-            return PlaceholderFragment()
+        fun newInstance(): MainFragment {
+            return MainFragment()
         }
     }
 

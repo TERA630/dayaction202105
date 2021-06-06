@@ -5,18 +5,18 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.PlaceholderFragment">
+    tools:context=".MainActivity"
+    tools:layout="@layout/fragment_main">
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/firstPageList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/labelDate"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_test"
         tools:itemCount="8"
-        tools:showIn="@layout/activity_main"/>
+        tools:listitem="@layout/item_test" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

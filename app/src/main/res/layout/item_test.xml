@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/cellText"
@@ -11,11 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:padding="8dp"
-        android:background="@drawable/shape_rounded_corner"
-        android:textColor="@color/white"
+        android:background="@drawable/squre_silver_gradient"
+        android:textColor="@color/darkBrown"
         android:text="@string/testItem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/testItem"
-        />
+        tools:text="@string/testItem" />
 </androidx.constraintlayout.widget.ConstraintLayout>

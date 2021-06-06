@@ -9,6 +9,6 @@ const val NUM_PAGES = 2
 class SectionsPagerAdapter(fragmentActivity:FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = NUM_PAGES
         override fun createFragment(position: Int): Fragment {
-            return PlaceholderFragment.newInstance()
+            return MainFragment.newInstance()
         }
 }
