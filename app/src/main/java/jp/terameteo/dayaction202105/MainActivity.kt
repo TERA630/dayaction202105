@@ -14,6 +14,7 @@ import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 // TODO ROOM 実装
 // TODO
 
+const val ARCHIVE_POINT = "archivePoint"
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,8 +28,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val dateLabelText = binding.labelDate
         val secretary = DataSecretary()
-        dateLabelText.text =
-            secretary.getTodayString() //  getString(R.string.date_placeHolder,"2021","6","3")
+        dateLabelText.text = secretary.getTodayString()
+        val achieveLabel = binding.achievement
+        achieveLabel.text = resources.getString(R.string.reward_placeHolder,secretary.loadIntFromPreference(
+            ARCHIVE_POINT,context = this))
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
         val tabLayout: TabLayout = binding.tabLayout

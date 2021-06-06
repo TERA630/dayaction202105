@@ -5,6 +5,7 @@
     <string name="tab_text_2">Tab 2</string>
     　　
     <string name="date_placeHolder">%1$s年%2$s月%3$s日</string>
+    <string name="reward_placeHolder">%1d円</string>
     <string name="save">保存</string>
     <string name="cancel">破棄</string>
     <string name="press_to_append">Press to append item</string>
