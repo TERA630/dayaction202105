@@ -13,7 +13,7 @@ data class StoredItemEntity(
     var finishedHistory: String = ""
 )
 
-class TodayItemEntity(
+data class TodayItemEntity(
     var title: String = "unnamed",
     var reward: Int = 30,
     var category: String = "",

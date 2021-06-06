@@ -18,11 +18,6 @@ class MainFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        pageViewModel.setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?:1)
-    }
-
     override fun onCreateView( // これから画面を描画する
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,7 +41,7 @@ class MainFragment : Fragment() {
         if (pageViewModel.currentItems.isNullOrEmpty()) {
             pageViewModel.makeDefaultItems(thisContext)
         }
-        val thisPageListAdaptor  = StartPageListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
+        val thisPageListAdaptor  = MainPageListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
         firstPageListView.adapter = thisPageListAdaptor
         return root
     }

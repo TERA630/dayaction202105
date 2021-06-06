@@ -1,20 +1,21 @@
 package jp.terameteo.dayaction202105.ui.main
 
 import android.view.LayoutInflater
-
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.terameteo.dayaction202105.StoredItemEntity
+import jp.terameteo.dayaction202105.R
+import jp.terameteo.dayaction202105.TodayItemEntity
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 
-class StartPageListAdaptor(
+class MainPageListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
     private val viewModel: MainViewModel
 ) :
-    androidx.recyclerview.widget.ListAdapter<StoredItemEntity, StartPageListAdaptor.ViewHolderOfCell>(
+    androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainPageListAdaptor.ViewHolderOfCell>(
         DiffCallback
     ) {
     override fun getItemCount(): Int = viewModel.currentItems.size
@@ -30,24 +31,37 @@ class StartPageListAdaptor(
     }
 
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
-        val thisPositionView = holder.textView
-        thisPositionView.text = viewModel.currentItems[position].title
+        val thisCellView = holder.textView
+        val theme = thisCellView.context.theme
+        val resource = thisCellView.resources
+
+        thisCellView.text = viewModel.currentItems[position].title
+        thisCellView.background = if (viewModel.currentItems[position].isChecked) {
+            ResourcesCompat.getDrawable(resource, R.drawable.square_gold_gradient, theme)
+        } else {
+            ResourcesCompat.getDrawable(resource, R.drawable.square_silver_gradient, theme)
+        }
+        thisCellView.setOnClickListener {
+            viewModel.currentItems[position].isChecked = !viewModel.currentItems[position].isChecked
+            notifyItemChanged(position)
+        }
+
     }
 }
 
-private object DiffCallback : DiffUtil.ItemCallback<StoredItemEntity>() {
+private object DiffCallback : DiffUtil.ItemCallback<TodayItemEntity>() {
     override fun areItemsTheSame(
-        oldStoredItem: StoredItemEntity,
-        newStoredItem: StoredItemEntity
+        oldStoredItem: TodayItemEntity,
+        newStoredItem: TodayItemEntity
     ): Boolean {
-        return oldStoredItem.id == newStoredItem.id
+        return oldStoredItem.title == newStoredItem.title
     }
 
     override fun areContentsTheSame(
-        oldStoredItem: StoredItemEntity,
-        newStoredItem: StoredItemEntity
+        oldItem: TodayItemEntity,
+        newItem: TodayItemEntity
     ): Boolean {
-        return oldStoredItem == newStoredItem
+        return oldItem == newItem
     }
 
 }

@@ -17,7 +17,7 @@ import androidx.room.*
     fun selectAll(): List<StoredItemEntity>
 }
 
-@Database(entities = [StoredItemEntity::class], version = 1)
+@Database(entities = [StoredItemEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }

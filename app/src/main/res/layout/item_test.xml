@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
     <TextView
@@ -12,10 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:padding="8dp"
-        android:background="@drawable/squre_silver_gradient"
+        android:checked = "true"
         android:textColor="@color/darkBrown"
         android:text="@string/testItem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/square_silver_gradient"
         tools:text="@string/testItem" />
 </androidx.constraintlayout.widget.ConstraintLayout>
