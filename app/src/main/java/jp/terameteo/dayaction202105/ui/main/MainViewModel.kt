@@ -1,13 +1,21 @@
 package jp.terameteo.dayaction202105.ui.main
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.StoredItemEntity
 import jp.terameteo.dayaction202105.TodayItemEntity
 
 class MainViewModel : ViewModel() {
-    val  currentItems = mutableListOf<TodayItemEntity>()
+    val currentItems = mutableListOf<TodayItemEntity>()
+    lateinit var currentReward:MutableLiveData<Int>
+
+
+    fun loadModel(_context: Context){
+
+    }
+
 
     fun convertItemToString(StoredItemEntity: StoredItemEntity): String { // ItemEntity が変われば直す必要あり
         return StoredItemEntity.title + ";" + StoredItemEntity.reward + ";" + StoredItemEntity.category

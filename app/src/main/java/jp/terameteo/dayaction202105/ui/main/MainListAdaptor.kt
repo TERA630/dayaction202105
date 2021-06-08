@@ -2,7 +2,6 @@ package jp.terameteo.dayaction202105.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -11,27 +10,29 @@ import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.TodayItemEntity
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 
-class MainPageListAdaptor(
+class MainListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
     private val viewModel: MainViewModel
 ) :
-    androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainPageListAdaptor.ViewHolderOfCell>(
+    androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainListAdaptor.ViewHolderOfCell>(
         DiffCallback
     ) {
     override fun getItemCount(): Int = viewModel.currentItems.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderOfCell {
+        // リストの表示要求があったとき､viewTypeに応じて必要なViewHolderを確保する｡
         val layoutInflater = LayoutInflater.from(parent.context)
         return ViewHolderOfCell(ItemTestBinding.inflate(layoutInflater, parent, false))
     }
-
-    class ViewHolderOfCell(private val binding: ItemTestBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        val textView: TextView = binding.cellText
-    }
+    class ViewHolderOfCell( val binding: ItemTestBinding) :
+        RecyclerView.ViewHolder(binding.root)
+    // Viewへの参照を保持｡以前は個々の子要素の参照を保存していたが､
+    // ViewBindingが使用可能となったので､Bindingのみ保持するようになった｡
 
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
-        val thisCellView = holder.textView
+        // リストのPositionの部位の表示要求があったときに､データなどをViewに設定する｡
+
+        val thisCellView = holder.binding.cellText
         val theme = thisCellView.context.theme
         val resource = thisCellView.resources
 
@@ -44,6 +45,9 @@ class MainPageListAdaptor(
         thisCellView.setOnClickListener {
             viewModel.currentItems[position].isChecked = !viewModel.currentItems[position].isChecked
             notifyItemChanged(position)
+            val currentValue =  viewModel.currentReward.value ?: 0
+            val newValue = currentValue + viewModel.currentItems[position].reward
+            viewModel.currentReward.postValue(newValue)
         }
 
     }
@@ -69,5 +73,4 @@ private object DiffCallback : DiffUtil.ItemCallback<TodayItemEntity>() {
 // SpannedString ： テキスト･マークアップ共に作成後変更しない｡
 // SpannableString ： テキストは変更する｡ 後からスパンをアタッチすることができる｡
 // SpannableStringBuilder ： テキストやスパンを作成後に変更する｡ あるいは多数のスパンをアタッチするとき｡
-// Span Bold Italic ､ フォント(Monospace､Serif,sans-serif) 文字色､バックグラウンドカラー 下線 取り消し線  テキストサイズの変更｡
-//
+// Span Bold Italic ､ フォント(Monospace､Serif,sans-serif) 文字色､バックグラウンドカラー 下線 取り消し線  テキストサイズの変更

@@ -41,7 +41,7 @@ class MainFragment : Fragment() {
         if (pageViewModel.currentItems.isNullOrEmpty()) {
             pageViewModel.makeDefaultItems(thisContext)
         }
-        val thisPageListAdaptor  = MainPageListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
+        val thisPageListAdaptor  = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
         firstPageListView.adapter = thisPageListAdaptor
         return root
     }

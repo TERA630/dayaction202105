@@ -1,12 +1,14 @@
 package jp.terameteo.dayaction202105
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
+import jp.terameteo.dayaction202105.ui.main.MainViewModel
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
 // TODO クリック時のイベント
@@ -17,13 +19,13 @@ import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 const val ARCHIVE_POINT = "archivePoint"
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
+    val viewModel:MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-
+        
+        // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val dateLabelText = binding.labelDate
