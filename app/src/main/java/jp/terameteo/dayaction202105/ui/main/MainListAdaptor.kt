@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.terameteo.dayaction202105.R
-import jp.terameteo.dayaction202105.TodayItemEntity
+import jp.terameteo.dayaction202105.model.TodayItemEntity
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 
 class MainListAdaptor(

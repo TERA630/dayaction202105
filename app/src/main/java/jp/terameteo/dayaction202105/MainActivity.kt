@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.intialize(this)
         
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
