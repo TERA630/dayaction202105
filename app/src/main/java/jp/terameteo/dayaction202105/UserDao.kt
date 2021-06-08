@@ -1,7 +1,9 @@
+/*
 package jp.terameteo.dayaction202105
 
-import androidx.room.*
 
+import androidx.room.*
+import jp.terameteo.dayaction202105.model.StoredItemEntity
 @Dao
  interface UserDao {
     @Insert
@@ -17,7 +19,7 @@ import androidx.room.*
     fun selectAll(): List<StoredItemEntity>
 }
 
-@Database(entities = [StoredItemEntity::class], version = 2)
-abstract class AppDatabase : RoomDatabase() {
+@Database(entities = [StoredItemEntity::class], version = 3)
+abstract class MyDataBase : RoomDatabase() {
     abstract fun userDao(): UserDao
-}
+}*/

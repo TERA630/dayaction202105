@@ -20,10 +20,11 @@ const val ARCHIVE_POINT = "archivePoint"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    val viewModel:MainViewModel by viewModels()
+    val viewModel:MainViewModel by viewModels() // activity-ktx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.intialize(this)
 
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,3 +50,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+//　Activityのみでアプリケーションを完結させようとすると､
+//　端末の回転時やアプリケーションの切り替え時に表示状態(State)の保持に苦労する｡
+//　2017年頃までには回転させない､Activity再生成させない､onSavedInstanceStateを使うなど
+//　あったが､現状では状態の保持はViewModelに委譲するのが主流｡
