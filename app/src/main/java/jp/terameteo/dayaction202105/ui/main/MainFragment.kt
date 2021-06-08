@@ -24,9 +24,6 @@ class MainFragment : Fragment() {
     ): View {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        val root = binding.root
-
-
 
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
@@ -37,12 +34,9 @@ class MainFragment : Fragment() {
         val firstPageListView = binding.firstPageList
         firstPageListView.layoutManager = flexBoxLayoutManager
 
-        val thisContext = this.requireContext()
-        if (pageViewModel.currentItems.isNullOrEmpty()) {
-            pageViewModel.makeDefaultItems(thisContext)
-        }
         val thisPageListAdaptor  = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
         firstPageListView.adapter = thisPageListAdaptor
+        val root = binding.root
         return root
     }
 

@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewModel.intialize(this)
 
+
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -33,8 +34,10 @@ class MainActivity : AppCompatActivity() {
         val secretary = DataSecretary()
         dateLabelText.text = secretary.getTodayString()
         val achieveLabel = binding.achievement
-        achieveLabel.text = resources.getString(R.string.reward_placeHolder,secretary.loadIntFromPreference(
-            ARCHIVE_POINT,context = this))
+        viewModel.currentReward.observe(
+            this) { reward ->
+                achieveLabel.text = resources.getString(R.string.reward_placeHolder,reward)
+            }
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
         val tabLayout: TabLayout = binding.tabLayout
@@ -48,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
     }
 }
 //　Activityのみでアプリケーションを完結させようとすると､

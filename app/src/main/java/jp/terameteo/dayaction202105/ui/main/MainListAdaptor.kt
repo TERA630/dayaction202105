@@ -7,8 +7,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.terameteo.dayaction202105.R
-import jp.terameteo.dayaction202105.model.TodayItemEntity
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
+import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
@@ -30,7 +30,7 @@ class MainListAdaptor(
     // ViewBindingが使用可能となったので､Bindingのみ保持するようになった｡
 
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
-        // リストのPositionの部位の表示要求があったときに､データなどをViewに設定する｡
+        // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
 
         val thisCellView = holder.binding.cellText
         val theme = thisCellView.context.theme
