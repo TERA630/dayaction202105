@@ -42,7 +42,6 @@ class MainFragment : Fragment() {
 
 
     companion object {
-        private const val ARG_SECTION_NUMBER = "section_number"
 
         @JvmStatic
         fun newInstance(): MainFragment {
@@ -55,3 +54,6 @@ class MainFragment : Fragment() {
         _binding = null
     }
 }
+
+// FragmentはModelを直接さわらない
+//

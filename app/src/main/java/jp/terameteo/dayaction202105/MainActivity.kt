@@ -20,13 +20,12 @@ const val ARCHIVE_POINT = "archivePoint"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    val viewModel:MainViewModel by viewModels() // activity-ktx
+    private val viewModel:MainViewModel by viewModels() // activity-ktx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.intialize(this)
-
-
+        viewModel.initialize(this)
+        
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -34,10 +33,7 @@ class MainActivity : AppCompatActivity() {
         val secretary = DataSecretary()
         dateLabelText.text = secretary.getTodayString()
         val achieveLabel = binding.achievement
-
-        viewModel.currentReward.observe(this) { reward ->
-                achieveLabel.text = resources.getString(R.string.reward_placeHolder,reward)
-            }
+        achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
@@ -48,11 +44,18 @@ class MainActivity : AppCompatActivity() {
         mediator.attach()
         val fab: FloatingActionButton = binding.fab
 
+        viewModel.currentReward.observe(this){
+            achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
+        }
+
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-
+    }
+    override fun onPause() {
+        super.onPause()
+        viewModel.stateSave(this)
     }
 }
 //　Activityのみでアプリケーションを完結させようとすると､

@@ -43,11 +43,18 @@ class MainListAdaptor(
             ResourcesCompat.getDrawable(resource, R.drawable.square_silver_gradient, theme)
         }
         thisCellView.setOnClickListener {
-            viewModel.currentItems[position].isChecked = !viewModel.currentItems[position].isChecked
-            notifyItemChanged(position)
             val currentValue =  viewModel.currentReward.value ?: 0
-            val newValue = currentValue + viewModel.currentItems[position].reward
-            viewModel.currentReward.postValue(newValue)
+            if (viewModel.currentItems[position].isChecked) {
+                // アイテムがチェック済み チェックをはずす
+                viewModel.currentItems[position].isChecked = false
+                val newValue = currentValue - viewModel.currentItems[position].reward
+                viewModel.currentReward.postValue(newValue)
+            } else {
+                viewModel.currentItems[position].isChecked = true
+                val newValue = currentValue + viewModel.currentItems[position].reward
+                viewModel.currentReward.postValue(newValue)
+            }
+            notifyItemChanged(position)
         }
 
     }
@@ -58,7 +65,7 @@ private object DiffCallback : DiffUtil.ItemCallback<TodayItemEntity>() {
         oldStoredItem: TodayItemEntity,
         newStoredItem: TodayItemEntity
     ): Boolean {
-        return oldStoredItem.title == newStoredItem.title
+        return oldStoredItem.id == newStoredItem.id
     }
 
     override fun areContentsTheSame(

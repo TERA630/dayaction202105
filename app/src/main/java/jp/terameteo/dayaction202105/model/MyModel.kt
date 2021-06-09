@@ -8,7 +8,8 @@ import jp.terameteo.dayaction202105.R
 const val ERROR_TITLE = "error title"
 const val ERROR_CATEGORY = "error category"
 
-const val REWARD_INT = "rewardInt"
+const val REWARD_HISTORY = "rewardHistory"
+
 class MyModel {
     fun getItemsFromResource (_context: Context) :List<TodayItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
@@ -48,11 +49,18 @@ class MyModel {
         }
         return StoredItemEntity(id, title,reward,category)
     }
-     fun loadRewardFromPreference( context: Context): Int {
-            val preferences = context.getSharedPreferences(REWARD_INT, Context.MODE_PRIVATE)
-            return preferences?.getInt(REWARD_INT,0) ?: 0
-        }
+    fun loadRewardFromPreference(_context: Context):Int {
+        val preferences = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE)
+        return preferences?.getInt(REWARD_HISTORY, 0) ?: 0
+    }
+    fun saveRewardToPreference(_context: Context){
+        val preferenceEditor = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE).edit()
+        preferenceEditor.putInt(REWARD_HISTORY, 0)
+        preferenceEditor.apply()
+    }
+
 }
+
 
 
 data class StoredItemEntity(
