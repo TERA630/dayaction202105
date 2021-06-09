@@ -14,6 +14,8 @@ class MainViewModel : ViewModel() {
         currentItems.clear()
         val myModel = MyModel()
         currentItems.addAll(myModel.getItemsFromResource(_context))
+        val reward  = myModel.loadRewardFromPreference(_context)
+        currentReward.value = reward
     }
 
 

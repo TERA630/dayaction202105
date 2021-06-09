@@ -34,10 +34,11 @@ class MainActivity : AppCompatActivity() {
         val secretary = DataSecretary()
         dateLabelText.text = secretary.getTodayString()
         val achieveLabel = binding.achievement
-        viewModel.currentReward.observe(
-            this) { reward ->
+
+        viewModel.currentReward.observe(this) { reward ->
                 achieveLabel.text = resources.getString(R.string.reward_placeHolder,reward)
             }
+
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
         val tabLayout: TabLayout = binding.tabLayout
