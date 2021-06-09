@@ -37,10 +37,6 @@ class MainFragment : Fragment() {
         val firstPageListView = binding.firstPageList
         firstPageListView.layoutManager = flexBoxLayoutManager
 
-        val thisContext = this.requireContext()
-        if (pageViewModel.currentItems.isNullOrEmpty()) {
-            pageViewModel.makeDefaultItems(thisContext)
-        }
         val thisPageListAdaptor  = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
         firstPageListView.adapter = thisPageListAdaptor
         return root
@@ -48,7 +44,6 @@ class MainFragment : Fragment() {
 
 
     companion object {
-        private const val ARG_SECTION_NUMBER = "section_number"
 
         @JvmStatic
         fun newInstance(): MainFragment {
@@ -61,3 +56,6 @@ class MainFragment : Fragment() {
         _binding = null
     }
 }
+
+// FragmentはModelを直接さわらない
+//

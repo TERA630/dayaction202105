@@ -10,18 +10,20 @@ import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<TodayItemEntity>()
-    lateinit var currentReward:MutableLiveData<Int>
-    lateinit var myModel: MyModel
+    val currentReward:MutableLiveData<Int> = MutableLiveData(0)
+    private lateinit var myModel: MyModel
 
-    fun intialize(_context:Context){
+    fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
+        myModel = MyModel()
         currentItems.clear()
         currentItems.addAll(myModel.getItemsFromResource(_context))
+        currentReward.postValue(myModel.loadRewardFromPreference(_context))
     }
 
-
-
-
+    fun stateSave(_context: Context) {
+        myModel.saveRewardToPreference(_context)
+    }
 }
 
 // ViewModel 　Viewの状態保持
