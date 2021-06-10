@@ -11,19 +11,10 @@ import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
-
     private val pageViewModel: MainViewModel by activityViewModels()
-    private var _binding: FragmentMainBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    override fun onCreateView( // これから画面を描画する
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        val binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
@@ -31,24 +22,20 @@ class MainFragment : Fragment() {
             justifyContent = JustifyContent.FLEX_START
             alignItems = AlignItems.FLEX_START
         }
-        val firstPageListView = binding.firstPageList
-        firstPageListView.layoutManager = flexBoxLayoutManager
-        firstPageListView.adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
+        binding.firstPageList.apply {
+            layoutManager = flexBoxLayoutManager
+            adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
+        }
         return root
     }
-
-
     companion object {
-
         @JvmStatic
         fun newInstance(): MainFragment {
             return MainFragment()
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
     }
 }
 

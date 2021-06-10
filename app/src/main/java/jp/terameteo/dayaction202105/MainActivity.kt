@@ -11,6 +11,7 @@ import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
 // TODO ROOM 実装
+// TODO 歴史のロジック
 
 const val ARCHIVE_POINT = "archivePoint"
 
@@ -28,16 +29,13 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this // LivedataとDataBindingの連携に必要な一文
         setContentView(binding.root)
 
-
-       val viewPager = binding.pager
-       viewPager.adapter = SectionsPagerAdapter(this,viewModel.currentCategory.size)
-        val tabLayout: TabLayout = binding.tabLayout
-        val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        val viewPager = binding.pager
+        viewPager.adapter = SectionsPagerAdapter(this,viewModel.currentCategory.size)
+        val mediator = TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
             tab.text = viewModel.currentCategory[position]
         }
-         mediator.attach()
+        mediator.attach()
         val fab: FloatingActionButton = binding.fab
-
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()

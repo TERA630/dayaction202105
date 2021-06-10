@@ -32,7 +32,8 @@ class MainViewModel : ViewModel() {
     }
 
     fun stateSave(_context: Context) {
-        myModel.saveRewardToPreference(_context)
+        val reward = currentReward.value ?:0
+        myModel.saveRewardToPreference(reward,_context)
     }
 }
 

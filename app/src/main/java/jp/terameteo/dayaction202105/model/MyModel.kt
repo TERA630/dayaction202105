@@ -69,9 +69,9 @@ class MyModel {
         val preferences = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE)
         return preferences?.getInt(REWARD_HISTORY, 0) ?: 0
     }
-    fun saveRewardToPreference(_context: Context){
+    fun saveRewardToPreference(reward: Int,_context: Context){
         val preferenceEditor = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE).edit()
-        preferenceEditor.putInt(REWARD_HISTORY, 0)
+        preferenceEditor.putInt(REWARD_HISTORY, reward)
         preferenceEditor.apply()
     }
 
