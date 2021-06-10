@@ -45,8 +45,7 @@ class MainViewModel : ViewModel() {
 //　LiveDataを保持する｡　
 // ActivityやFragmentはObserveして変更があればUI更新
 //　AdapterはViewModelを参照している｡　Observeするならば･･
-//　Viewへの参照を保持するべきでない｡
-//　Context/Activityの参照を保持するべきでない｡
+//　View  / Context の参照を保持するべきでない｡
 //　ViewへのActionを送信｡　Commands
 //　アンチパターン　ViewがViewModelのメンバを直接操作
 //　Model-> ViewModel　ModelからUIの描画に必要な情報に変換保持
