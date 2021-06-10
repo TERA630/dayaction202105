@@ -11,9 +11,7 @@ import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
 import jp.terameteo.dayaction202105.ui.main.MainViewModel
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
-// TODO 自動カテゴリ分け タブ作成
 // TODO ROOM 実装
-// TODO
 
 const val ARCHIVE_POINT = "archivePoint"
 
@@ -29,8 +27,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val dateLabelText = binding.labelDate
-        val secretary = DataSecretary()
-        dateLabelText.text = secretary.getTodayString()
+        dateLabelText.text = viewModel.currentDate
         val achieveLabel = binding.achievement
         achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
@@ -60,4 +57,7 @@ class MainActivity : AppCompatActivity() {
 //　Activityのみでアプリケーションを完結させようとすると､
 //　端末の回転時やアプリケーションの切り替え時に表示状態(State)の保持に苦労する｡
 //　2017年頃までには回転させない､Activity再生成させない､onSavedInstanceStateを使うなど
-//　あったが､現状では状態の保持はViewModelに委譲するのが主流｡
+//　あったが､現状では状態の保持はViewModelにおくのが主流｡
+
+//　Bind
+//　Observe　が　OnCreateに全て記載｡　DataBindingとすれば回避できるかも
