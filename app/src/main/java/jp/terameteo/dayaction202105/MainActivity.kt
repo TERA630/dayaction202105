@@ -8,7 +8,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
-import jp.terameteo.dayaction202105.ui.main.MainViewModel
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
 // TODO ROOM 実装
@@ -17,19 +16,18 @@ const val ARCHIVE_POINT = "archivePoint"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel:MainViewModel by viewModels() // activity-ktx
+    private val viewModel: MainViewModel by viewModels() // activity-ktx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize(this)
-        
+
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this // LivedataとDataBindingの連携に必要な一文
         setContentView(binding.root)
-        val dateLabelText = binding.labelDate
-        dateLabelText.text = viewModel.currentDate
-        val achieveLabel = binding.achievement
-        achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
+
 
        val viewPager = binding.pager
        viewPager.adapter = SectionsPagerAdapter(this,viewModel.currentCategory.size)
@@ -39,10 +37,6 @@ class MainActivity : AppCompatActivity() {
         }
          mediator.attach()
         val fab: FloatingActionButton = binding.fab
-
-        viewModel.currentReward.observe(this){
-            achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
-        }
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)

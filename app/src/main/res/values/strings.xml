@@ -15,7 +15,7 @@
     <string name="menu_customToGet">つけたい習慣を登録する</string>
     <string name="testReward">1200円</string>
     <string name="testItem">気づきをメモする</string>
-
+    <string name="testDate">2021年6月10日</string>
 
     <string-array
             name="default_item_list">

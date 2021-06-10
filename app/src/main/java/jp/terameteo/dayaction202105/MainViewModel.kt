@@ -1,17 +1,17 @@
-package jp.terameteo.dayaction202105.ui.main
+package jp.terameteo.dayaction202105
 
 import android.content.Context
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.model.MyModel
-import jp.terameteo.dayaction202105.model.StoredItemEntity
 import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
     var currentDate = "19xx年xx月xx日"
     val currentItems = mutableListOf<TodayItemEntity>()
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
+    val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = emptyList<String>().toMutableList()
 
     private lateinit var myModel: MyModel
@@ -23,8 +23,12 @@ class MainViewModel : ViewModel() {
         currentItems.clear()
         currentItems.addAll(myModel.getItemsFromResource(_context))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
-
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
+        currentRewardStr.addSource(currentReward){
+            value -> currentRewardStr.value = "$value　円"
+        }
+
+
     }
 
     fun stateSave(_context: Context) {
