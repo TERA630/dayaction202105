@@ -22,12 +22,8 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
-
-
-
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
@@ -36,9 +32,7 @@ class MainFragment : Fragment() {
         }
         val firstPageListView = binding.firstPageList
         firstPageListView.layoutManager = flexBoxLayoutManager
-
-        val thisPageListAdaptor  = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
-        firstPageListView.adapter = thisPageListAdaptor
+        firstPageListView.adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
         return root
     }
 

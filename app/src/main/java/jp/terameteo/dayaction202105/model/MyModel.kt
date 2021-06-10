@@ -59,6 +59,12 @@ class MyModel {
         }
         return StoredItemEntity(id, title,reward,category)
     }
+    fun makeCategoryList( _itemList:List<TodayItemEntity>) : List<String>{
+        val categoryList = List(_itemList.size){index-> _itemList[index].category}
+        return categoryList.distinct()
+    }
+
+
     fun loadRewardFromPreference(_context: Context):Int {
         val preferences = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE)
         return preferences?.getInt(REWARD_HISTORY, 0) ?: 0

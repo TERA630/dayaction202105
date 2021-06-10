@@ -12,6 +12,8 @@ class MainViewModel : ViewModel() {
     var currentDate = "19xx年xx月xx日"
     val currentItems = mutableListOf<TodayItemEntity>()
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
+    val currentCategory = emptyList<String>().toMutableList()
+
     private lateinit var myModel: MyModel
 
     fun initialize(_context:Context){
@@ -20,6 +22,8 @@ class MainViewModel : ViewModel() {
         currentDate = myModel.getTodayString()
         currentItems.clear()
         currentItems.addAll(myModel.getItemsFromResource(_context))
+        currentCategory.addAll(myModel.makeCategoryList(currentItems))
+
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
     }
 
@@ -33,7 +37,8 @@ class MainViewModel : ViewModel() {
 //　LiveDataを保持する｡
 //　Modelのデータから､ViewにUIを描画する(Binding)ための情報を渡す｡
 //　Activity､Fragment､Adapterのいずれにも渡せるはず｡
-//　LiveDataを保持する｡　ActivityやFragmentはObserveして変更があればUI更新
+//　LiveDataを保持する｡　
+// ActivityやFragmentはObserveして変更があればUI更新
 //　AdapterはViewModelを参照している｡　Observeするならば･･
 //　Viewへの参照を保持するべきでない｡
 //　Context/Activityの参照を保持するべきでない｡

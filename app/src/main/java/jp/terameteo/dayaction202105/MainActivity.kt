@@ -11,7 +11,6 @@ import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
 import jp.terameteo.dayaction202105.ui.main.MainViewModel
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
-// TODO クリック時のイベント
 // TODO 自動カテゴリ分け タブ作成
 // TODO ROOM 実装
 // TODO
@@ -35,13 +34,13 @@ class MainActivity : AppCompatActivity() {
         val achieveLabel = binding.achievement
         achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
-        val viewPager = binding.pager
-        viewPager.adapter = SectionsPagerAdapter(this)
+       val viewPager = binding.pager
+       viewPager.adapter = SectionsPagerAdapter(this,viewModel.currentCategory.size)
         val tabLayout: TabLayout = binding.tabLayout
         val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = "Tab  $position "
+            tab.text = viewModel.currentCategory[position]
         }
-        mediator.attach()
+         mediator.attach()
         val fab: FloatingActionButton = binding.fab
 
         viewModel.currentReward.observe(this){
