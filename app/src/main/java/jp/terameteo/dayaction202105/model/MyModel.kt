@@ -16,33 +16,36 @@ const val ERROR_CATEGORY = "error category"
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
-    fun getTodayString(backDate:Int): String {
+    fun getDayString(backDate:Int): String {
         val local = Locale.JAPAN
         val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
-        val dateFormat = SimpleDateFormat(pattern, local)
         val date = LocalDate.now().minusDays(backDate.toLong())
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
-        return dateFormat.format(javaUtilDate)
+        return SimpleDateFormat(pattern, local).format(javaUtilDate)
     }
 
     fun getItemsFromResource (_context: Context) :List<TodayItemEntity> {
-        val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
+        val items = getStoredItemFromResource(_context)
 
-        val items = List(itemsFromResource.size) { index ->
-            convertStringToItem(index, itemsFromResource[index]) //　アイテム作成ラムダ
-        }
         val newItems = MutableList(items.size) { i ->
             TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category,
             shouldDoToday = true,isChecked = false)
         }
         return newItems
     }
-    private fun convertItemToString(StoredItemEntity: StoredItemEntity): String { // ItemEntity が変われば直す必要あり
-        return StoredItemEntity.title + ";" + StoredItemEntity.reward + ";" + StoredItemEntity.category
+    fun getStoredItemFromResource(_context: Context) : List<StoredItemEntity> {
+        val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
+        val items = List(itemsFromResource.size) { index ->
+            convertStringToStoredItem(index, itemsFromResource[index]) //　アイテム作成ラムダ
+        }
+        return items
     }
-    private fun convertStringToItem(id:Int,_string: String): StoredItemEntity {
-        // string = "title ; reward ; category ; " を与えられ､
-        // storedItem objectを返す｡
+    private fun convertItemToString(StoredItemEntity: StoredItemEntity): String { // ItemEntity が変われば直す必要あり
+        return StoredItemEntity.title + ";" + StoredItemEntity.reward + ";" + StoredItemEntity.category + ";" + StoredItemEntity.finishedHistory
+    }
+    private fun convertStringToStoredItem(id:Int, _string: String): StoredItemEntity {
+        // string = "title ; reward ; category ; finishedHistory" を与えられ､
+        // storedItem (title,reward,category,finishedHistory )を返す｡
         val elementList = _string.split(";").toMutableList()
 
         // 文字列が規則に従っているか
@@ -58,16 +61,21 @@ class MyModel {
         }
         val category = if(elementList[2].isBlank()){
             ERROR_CATEGORY
-        }else{
+            } else {
             elementList[2].trim()
         }
-        return StoredItemEntity(id, title,reward,category)
+
+        val history = if(elementList[3].matches("(20[0-9]{2}/[0-9]{2}/[0-9]{2})*".toRegex())){
+            elementList[3]
+        }else {
+            ""
+        }
+        return StoredItemEntity(id, title,reward,category,history)
     }
-    fun makeCategoryList( _itemList:List<TodayItemEntity>) : List<String>{
+    fun makeCategoryList( _itemList:List<StoredItemEntity>) : List<String>{
         val categoryList = List(_itemList.size){index-> _itemList[index].category}
         return categoryList.distinct()
     }
-
 
     fun loadRewardFromPreference(_context: Context):Int {
         val preferences = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE)

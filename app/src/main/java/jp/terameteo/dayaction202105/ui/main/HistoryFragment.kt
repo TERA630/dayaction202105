@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.flexbox.*
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.databinding.FragmentHistoryBinding
-import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
 
 class HistoryFragment :Fragment(){
 

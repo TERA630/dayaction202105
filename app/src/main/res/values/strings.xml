@@ -19,19 +19,18 @@
 
     <string-array
             name="default_item_list">
-        <item>本日の記録;30;Daily</item>
+        <item>本日の記録;30;Daily;2021/6/10</item>
         <item>明日の一日の予定;30;Daily</item>
-        <item>腕立て20;30;Daily</item>
-        <item>腹筋20;30;運動</item>
-        <item>腕立て2セット目;30;運動</item>
-        <item>勉強1ポモドーロ;60;運動</item>
-        <item>朝目が覚めたらすぐに起きる;60;Daily</item>
+        <item>腕立て20;30;Daily;2021/6/10</item>
+        <item>腹筋20;30;運動;2021/6/9</item>
+        <item>腕立て2セット目;30;運動;2021/6/10,2021/6/11</item>
+        <item>勉強1ポモドーロ;60;運動;2021/6/8</item>
+        <item>朝目が覚めたらすぐに起きる;60;Daily;2021/6/7</item>
         <item>朝スマホを触らない;30;Daily</item>
-        <item>6時台に自転車に乗り出発;30;Daily</item>
+        <item>6時台に自転車に乗り出発;30;Daily;2021/6/7</item>
         <item>腹筋2セット目;60;運動</item>
-        <item>プロテイン飲む;30;Daily</item>
+        <item>プロテイン飲む;30;Daily;2021/6/9,2021/6/10,2021/6/11</item>
         <item>股関節の柔軟;30;運動</item>
-
         <item>自転車の掃除;30;Weekly</item>
         <item>家計;60;Monthly</item>
         <item>不動産入出金;60;Monthly</item>
