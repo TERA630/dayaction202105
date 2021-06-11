@@ -6,6 +6,8 @@ import android.text.format.DateFormat
 import androidx.core.text.isDigitsOnly
 import androidx.room.PrimaryKey
 import jp.terameteo.dayaction202105.R
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 
 const val ERROR_TITLE = "error title"
@@ -14,11 +16,13 @@ const val ERROR_CATEGORY = "error category"
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
-    fun getTodayString(): String {
+    fun getTodayString(backDate:Int): String {
         val local = Locale.JAPAN
         val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
         val dateFormat = SimpleDateFormat(pattern, local)
-        return dateFormat.format(System.currentTimeMillis())
+        val date = LocalDate.now().minusDays(backDate.toLong())
+        val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        return dateFormat.format(javaUtilDate)
     }
 
     fun getItemsFromResource (_context: Context) :List<TodayItemEntity> {

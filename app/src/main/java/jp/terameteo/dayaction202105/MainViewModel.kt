@@ -19,7 +19,7 @@ class MainViewModel : ViewModel() {
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        currentDate = myModel.getTodayString()
+        currentDate = myModel.getTodayString(0)
         currentItems.clear()
         currentItems.addAll(myModel.getItemsFromResource(_context))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))

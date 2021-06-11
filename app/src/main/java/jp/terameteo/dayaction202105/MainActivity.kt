@@ -6,14 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
 // TODO ROOM 実装
 // TODO 歴史のロジック
-
-const val ARCHIVE_POINT = "archivePoint"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         val mediator = TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
             tab.text = viewModel.currentCategory[position]
         }
+        viewPager.setPageTransformer(ZoomOutPageTransformer())
         mediator.attach()
         val fab: FloatingActionButton = binding.fab
         fab.setOnClickListener { view ->
