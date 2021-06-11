@@ -30,22 +30,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val dateLabelText = binding.labelDate
-        val secretary = DataSecretary()
-        dateLabelText.text = secretary.getTodayString()
-        val achieveLabel = binding.achievement
-        achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
+        dateLabelText.text = viewModel.currentDate
+        val rewardLabel = binding.achievement
+        rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
         val viewPager = binding.pager
         viewPager.adapter = SectionsPagerAdapter(this)
         val tabLayout: TabLayout = binding.tabLayout
         val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = "Tab  $position "
+            tab.text = viewModel.currentCategory[position]
         }
         mediator.attach()
         val fab: FloatingActionButton = binding.fab
 
         viewModel.currentReward.observe(this){
-            achieveLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
+            rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
         }
 
         fab.setOnClickListener { view ->

@@ -3,21 +3,23 @@ package jp.terameteo.dayaction202105.ui.main
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.model.MyModel
-import jp.terameteo.dayaction202105.model.StoredItemEntity
 import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
+    var currentDate = ""
     val currentItems = mutableListOf<TodayItemEntity>()
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
+    val currentCategory = mutableListOf("")
     private lateinit var myModel: MyModel
 
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
+        currentDate = myModel.getTodayString()
         currentItems.clear()
         currentItems.addAll(myModel.getItemsFromResource(_context))
+        currentCategory.addAll(myModel.makeCategory(currentItems))
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
     }
 
