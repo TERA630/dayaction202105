@@ -17,7 +17,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
-       // dataBinding true   // Android Studio 4  Android Gradle Plugin 4.0.0 / Gradle 6.1.1
+        dataBinding true   // Android Studio 4  Android Gradle Plugin 4.0.0 / Gradle 6.1.1
         viewBinding true
     }
     buildTypes {

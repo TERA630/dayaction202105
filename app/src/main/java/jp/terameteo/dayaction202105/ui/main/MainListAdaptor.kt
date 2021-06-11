@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 import jp.terameteo.dayaction202105.model.TodayItemEntity
@@ -33,15 +34,14 @@ class MainListAdaptor(
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
 
         val thisCellView = holder.binding.cellText
-        val theme = thisCellView.context.theme
-        val resource = thisCellView.resources
-
         thisCellView.text = viewModel.currentItems[position].title
-        thisCellView.background = if (viewModel.currentItems[position].isChecked) {
-            ResourcesCompat.getDrawable(resource, R.drawable.square_gold_gradient, theme)
+        val currentStyle = if (viewModel.currentItems[position].isChecked) {
+            R.drawable.square_gold_gradient
         } else {
-            ResourcesCompat.getDrawable(resource, R.drawable.square_silver_gradient, theme)
+            R.drawable.square_silver_gradient
         }
+        thisCellView.background = ResourcesCompat.getDrawable(thisCellView.resources, currentStyle, thisCellView.context.theme)
+
         thisCellView.setOnClickListener {
             val currentValue =  viewModel.currentReward.value ?: 0
             if (viewModel.currentItems[position].isChecked) {
@@ -76,6 +76,9 @@ private object DiffCallback : DiffUtil.ItemCallback<TodayItemEntity>() {
     }
 
 }
+// adapter 　Fragmentから呼び出され､ViewModelのデータを使ってListを表示する｡
+// ViewHolder→ViewからContextを得る｡保持はしない
+// Modelには直接アクセスせず､ViewModelに送る｡
 
 // SpannedString ： テキスト･マークアップ共に作成後変更しない｡
 // SpannableString ： テキストは変更する｡ 後からスパンをアタッチすることができる｡

@@ -15,7 +15,7 @@
     <string name="menu_customToGet">つけたい習慣を登録する</string>
     <string name="testReward">1200円</string>
     <string name="testItem">気づきをメモする</string>
-
+    <string name="testDate">2021年6月10日</string>
 
     <string-array
             name="default_item_list">
@@ -32,5 +32,8 @@
         <item>プロテイン飲む;30;Daily</item>
         <item>股関節の柔軟;30;運動</item>
 
+        <item>自転車の掃除;30;Weekly</item>
+        <item>家計;60;Monthly</item>
+        <item>不動産入出金;60;Monthly</item>
         </string-array>
 </resources>

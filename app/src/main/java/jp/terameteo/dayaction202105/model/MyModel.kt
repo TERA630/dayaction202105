@@ -2,25 +2,29 @@ package jp.terameteo.dayaction202105.model
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat
-import android.text.format.DateFormat.getBestDateTimePattern
+import android.text.format.DateFormat
 import androidx.core.text.isDigitsOnly
 import androidx.room.PrimaryKey
 import jp.terameteo.dayaction202105.R
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
-
 
 const val ERROR_TITLE = "error title"
 const val ERROR_CATEGORY = "error category"
+
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
+    fun getTodayString(backDate:Int): String {
+        val local = Locale.JAPAN
+        val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
+        val dateFormat = SimpleDateFormat(pattern, local)
+        val date = LocalDate.now().minusDays(backDate.toLong())
+        val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        return dateFormat.format(javaUtilDate)
+    }
 
-    fun getTodayString(): String {
-
-    val pattern = getBestDateTimePattern(Locale.JAPAN, "YYYYEEEMMMd")
-    val dateFormat = SimpleDateFormat(pattern, Locale.JAPAN)
-    return dateFormat.format(System.currentTimeMillis())
-}
     fun getItemsFromResource (_context: Context) :List<TodayItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
 
@@ -59,21 +63,23 @@ class MyModel {
         }
         return StoredItemEntity(id, title,reward,category)
     }
+    fun makeCategoryList( _itemList:List<TodayItemEntity>) : List<String>{
+        val categoryList = List(_itemList.size){index-> _itemList[index].category}
+        return categoryList.distinct()
+    }
+
+
     fun loadRewardFromPreference(_context: Context):Int {
         val preferences = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE)
         return preferences?.getInt(REWARD_HISTORY, 0) ?: 0
     }
-    fun saveRewardToPreference(_context: Context){
+    fun saveRewardToPreference(reward: Int,_context: Context){
         val preferenceEditor = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE).edit()
-        preferenceEditor.putInt(REWARD_HISTORY, 0)
+        preferenceEditor.putInt(REWARD_HISTORY, reward)
         preferenceEditor.apply()
     }
 
-    fun makeCategory(list:List<TodayItemEntity>) :List<String> {
 
-        val categoryList = List(list.size){ index -> list[index].category}
-        return categoryList.distinct()
-    }
 
 }
 

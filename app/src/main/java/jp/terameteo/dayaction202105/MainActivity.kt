@@ -6,47 +6,36 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
-import jp.terameteo.dayaction202105.ui.main.MainViewModel
 import jp.terameteo.dayaction202105.ui.main.SectionsPagerAdapter
 
-// TODO クリック時のイベント
-// TODO 自動カテゴリ分け タブ作成
 // TODO ROOM 実装
-// TODO
-
-const val ARCHIVE_POINT = "archivePoint"
+// TODO 歴史のロジック
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel:MainViewModel by viewModels() // activity-ktx
+    private val viewModel: MainViewModel by viewModels() // activity-ktx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize(this)
-        
+
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this // LivedataとDataBindingの連携に必要な一文
         setContentView(binding.root)
-        val dateLabelText = binding.labelDate
-        dateLabelText.text = viewModel.currentDate
-        val rewardLabel = binding.achievement
-        rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
         val viewPager = binding.pager
-        viewPager.adapter = SectionsPagerAdapter(this)
-        val tabLayout: TabLayout = binding.tabLayout
-        val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        viewPager.adapter = SectionsPagerAdapter(this,viewModel.currentCategory.size)
+        val mediator = TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
             tab.text = viewModel.currentCategory[position]
         }
+        viewPager.setPageTransformer(ZoomOutPageTransformer())
         mediator.attach()
         val fab: FloatingActionButton = binding.fab
-
-        viewModel.currentReward.observe(this){
-            rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
-        }
-
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -60,4 +49,7 @@ class MainActivity : AppCompatActivity() {
 //　Activityのみでアプリケーションを完結させようとすると､
 //　端末の回転時やアプリケーションの切り替え時に表示状態(State)の保持に苦労する｡
 //　2017年頃までには回転させない､Activity再生成させない､onSavedInstanceStateを使うなど
-//　あったが､現状では状態の保持はViewModelに委譲するのが主流｡
+//　あったが､現状では状態の保持はViewModelにおくのが主流｡
+
+//　Bind
+//　Observe　が　OnCreateに全て記載｡　DataBindingとすれば回避できるかも
