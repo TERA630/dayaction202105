@@ -24,16 +24,16 @@ class MyModel {
         return SimpleDateFormat(pattern, local).format(javaUtilDate)
     }
 
-    fun getItemsFromResource (_context: Context) :List<TodayItemEntity> {
+    fun getItems (_context: Context) :List<TodayItemEntity> {
         val items = getStoredItemFromResource(_context)
 
         val newItems = MutableList(items.size) { i ->
             TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category,
-            shouldDoToday = true,isChecked = false)
+            )
         }
         return newItems
     }
-    fun getStoredItemFromResource(_context: Context) : List<StoredItemEntity> {
+    private fun getStoredItemFromResource(_context: Context) : List<StoredItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
         val items = List(itemsFromResource.size) { index ->
             convertStringToStoredItem(index, itemsFromResource[index]) //　アイテム作成ラムダ
@@ -72,7 +72,7 @@ class MyModel {
         }
         return StoredItemEntity(id, title,reward,category,history)
     }
-    fun makeCategoryList( _itemList:List<StoredItemEntity>) : List<String>{
+    fun makeCategoryList( _itemList:List<TodayItemEntity>) : List<String>{
         val categoryList = List(_itemList.size){index-> _itemList[index].category}
         return categoryList.distinct()
     }

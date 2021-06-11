@@ -21,7 +21,7 @@ class MainViewModel : ViewModel() {
         myModel = MyModel()
         currentDate = myModel.getDayString(0)
         currentItems.clear()
-        currentItems.addAll(myModel.getItemsFromResource(_context))
+        currentItems.addAll(myModel.getItems(_context))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){

@@ -15,7 +15,7 @@ class HistoryFragment :Fragment(){
     private val viewModel: MainViewModel by activityViewModels()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        val binding = FragmentHistoryBinding.inflate(inflater,container,false)
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
@@ -26,10 +26,6 @@ class HistoryFragment :Fragment(){
             layoutManager = flexBoxLayoutManager
             adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = viewModel)
         }
-
-//        binding.historyDate =
-
-
 
         return binding.root
     }
