@@ -15,9 +15,7 @@ class MainListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
     private val viewModel: MainViewModel
 ) :
-    androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainListAdaptor.ViewHolderOfCell>(
-        DiffCallback
-    ) {
+    androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
     override fun getItemCount(): Int = viewModel.currentItems.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderOfCell {

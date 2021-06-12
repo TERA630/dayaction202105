@@ -16,17 +16,24 @@ const val ERROR_CATEGORY = "error category"
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
-    fun getDayString(backDate:Int): String {
+    fun getDayStringJp(backDate:Int): String {
         val local = Locale.JAPAN
         val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
         val date = LocalDate.now().minusDays(backDate.toLong())
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return SimpleDateFormat(pattern, local).format(javaUtilDate)
     } // 0：本日　1～：backDate日前を返す｡
+    fun getDayString(backDate: Int):String{
+        val date = LocalDate.now().minusDays(backDate.toLong())
+        val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        return  SimpleDateFormat("yyyy/MM/dd",Locale.ENGLISH).format(javaUtilDate)
+    }
     fun getItemsOfDay (_context: Context,dateStr:String) :List<TodayItemEntity> {
         val items = getStoredItemFromResource(_context)
         val newItems = MutableList(items.size) { i ->
-            TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category)
+            TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category,
+                isChecked = (dateStr.toRegex().containsMatchIn(items[i].finishedHistory)),
+                shouldDoToday = true )
         }
         return newItems
     }
@@ -54,7 +61,7 @@ class MyModel {
             StoredItemEntity(id, title,reward,category,"")
         } else {
             // history がある場合
-            if(elementList[3].matches("20[0-9]{2}/([1-9]|1[0-2])/([1-9]|[12][0-9]|3[01])".toRegex())) {
+            if(elementList[3].matches("(20[0-9]{2}/([1-9]|1[0-2])/([1-9]|[12][0-9]|3[01]),?)+".toRegex())) {
                 // 年：2000-2099 /月： 1～9 or 10～12/ 日： 1～9　or　10～29　or　30,31の要素が一つでもあればマッチ
                 StoredItemEntity(id, title,reward,category,elementList[3])
             } else {

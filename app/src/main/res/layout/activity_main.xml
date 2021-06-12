@@ -1,51 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="viewModel"
-            type="jp.terameteo.dayaction202105.MainViewModel" />
-        </data>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/labelDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:text="@{viewModel.currentDate}"
-        tools:text="@string/testDate"
-        android:textSize="@dimen/top_label"/>
-
-    <TextView
         android:id="@+id/achievement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/testReward"
+        android:textSize="@dimen/reward_size"
+        android:typeface="monospace"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@{viewModel.currentRewardStr}"
-        tools:text="@string/testReward"/>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@color/colorWheat"
-        android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/labelDate" />
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
@@ -54,9 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+        app:layout_constraintTop_toBottomOf="@id/achievement"
+        />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -71,4 +44,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
