@@ -8,7 +8,6 @@ import jp.terameteo.dayaction202105.model.MyModel
 import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
-    var currentDate = "19xx年xx月xx日"
     val currentItems = mutableListOf<TodayItemEntity>()
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
@@ -19,18 +18,14 @@ class MainViewModel : ViewModel() {
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        currentDate = myModel.getDayString(0)
         currentItems.clear()
-        currentItems.addAll(myModel.getItems(_context))
+        currentItems.addAll(myModel.getItemsOfDay(_context,myModel.getDayString(0)))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
             value -> currentRewardStr.value = "$value　円"
         }
-
-
     }
-
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)
@@ -38,13 +33,10 @@ class MainViewModel : ViewModel() {
 }
 
 // ViewModel 　Viewの状態保持
-//　回転やアプリ切り替えなどでも破棄されない､Activityとは別のLifecycleを持つ｡
+//　回転やアプリ切り替えなどでも破棄されない｡
 //　LiveDataを保持する｡
 //　Modelのデータから､ViewにUIを描画する(Binding)ための情報を渡す｡
-//　Activity､Fragment､Adapterのいずれにも渡せるはず｡
-//　LiveDataを保持する｡　
 // ActivityやFragmentはObserveして変更があればUI更新
-//　AdapterはViewModelを参照している｡　Observeするならば･･
 //　View  / Context の参照を保持するべきでない｡
 //　ViewへのActionを送信｡　Commands
 //　アンチパターン　ViewがViewModelのメンバを直接操作

@@ -22,23 +22,19 @@ class MyModel {
         val date = LocalDate.now().minusDays(backDate.toLong())
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return SimpleDateFormat(pattern, local).format(javaUtilDate)
-    }
-
-    fun getItems (_context: Context) :List<TodayItemEntity> {
+    } // 0：本日　1～：backDate日前を返す｡
+    fun getItemsOfDay (_context: Context,dateStr:String) :List<TodayItemEntity> {
         val items = getStoredItemFromResource(_context)
-
         val newItems = MutableList(items.size) { i ->
-            TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category,
-            )
+            TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category)
         }
         return newItems
     }
-    private fun getStoredItemFromResource(_context: Context) : List<StoredItemEntity> {
+    private fun getStoredItemFromResource(_context: Context): List<StoredItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
-        val items = List(itemsFromResource.size) { index ->
-            convertStringToStoredItem(index, itemsFromResource[index]) //　アイテム作成ラムダ
+        return List(itemsFromResource.size) { index ->
+            convertStringToStoredItem(index, itemsFromResource[index])
         }
-        return items
     }
     private fun convertItemToString(StoredItemEntity: StoredItemEntity): String { // ItemEntity が変われば直す必要あり
         return StoredItemEntity.title + ";" + StoredItemEntity.reward + ";" + StoredItemEntity.category + ";" + StoredItemEntity.finishedHistory
@@ -49,34 +45,28 @@ class MyModel {
         val elementList = _string.split(";").toMutableList()
 
         // 文字列が規則に従っているか
-        val title = if(elementList[0].isBlank()) {
-            ERROR_TITLE
-            } else {
-            elementList[0].trim()
-            }
-        val reward = if(elementList[1].isDigitsOnly()) {
-            elementList[1].toInt()
-            } else {
-            0
-        }
-        val category = if(elementList[2].isBlank()){
-            ERROR_CATEGORY
-            } else {
-            elementList[2].trim()
-        }
+        val title = if(elementList[0].isBlank()) ERROR_TITLE else elementList[0].trim()
+        val reward = if(elementList[1].isDigitsOnly())  elementList[1].toInt() else 0
+        val category = if(elementList[2].isBlank()) ERROR_CATEGORY else elementList[2].trim()
 
-        val history = if(elementList[3].matches("(20[0-9]{2}/[0-9]{2}/[0-9]{2})*".toRegex())){
-            elementList[3]
-        }else {
-            ""
+        return if (elementList.size < 4) {
+            // historyが無い場合
+            StoredItemEntity(id, title,reward,category,"")
+        } else {
+            // history がある場合
+            if(elementList[3].matches("20[0-9]{2}/([1-9]|1[0-2])/([1-9]|[12][0-9]|3[01])".toRegex())) {
+                // 年：2000-2099 /月： 1～9 or 10～12/ 日： 1～9　or　10～29　or　30,31の要素が一つでもあればマッチ
+                StoredItemEntity(id, title,reward,category,elementList[3])
+            } else {
+                // マッチしなければ空文字列をHistoryに返しておく
+                StoredItemEntity(id,title,reward,category,"")
+            }
         }
-        return StoredItemEntity(id, title,reward,category,history)
     }
     fun makeCategoryList( _itemList:List<TodayItemEntity>) : List<String>{
         val categoryList = List(_itemList.size){index-> _itemList[index].category}
         return categoryList.distinct()
     }
-
     fun loadRewardFromPreference(_context: Context):Int {
         val preferences = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE)
         return preferences?.getInt(REWARD_HISTORY, 0) ?: 0
@@ -86,12 +76,7 @@ class MyModel {
         preferenceEditor.putInt(REWARD_HISTORY, reward)
         preferenceEditor.apply()
     }
-
-
-
 }
-
-
 
 data class StoredItemEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,

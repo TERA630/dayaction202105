@@ -10,5 +10,4 @@ class SectionsPagerAdapter(fragmentActivity:FragmentActivity,private val _pageNu
         override fun createFragment(position: Int): Fragment {
             return MainFragment.newInstance()
         }
-
 }
