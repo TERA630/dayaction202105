@@ -9,8 +9,9 @@ import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<TodayItemEntity>()
-    var currentDateJp = "19xx/12/31"
-    var currentPagePosition = 10
+    var currentDateJp  = MediatorLiveData<String>()
+    var currentDateEn  = MediatorLiveData<String>()
+    var currentPagePosition = MutableLiveData(10)
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = emptyList<String>().toMutableList()
@@ -20,15 +21,21 @@ class MainViewModel : ViewModel() {
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
         currentItems.clear()
-        currentDateJp = myModel.getDayStringJp(0)
-        val targetDateEn = myModel.getDayStringEn(0)
-        currentItems.addAll(myModel.getItemsOfDay(_context,targetDateEn))
+        currentDateJp.addSource(currentPagePosition){
+            value -> myModel.getDayStringJp(value)
+        }
+        currentDateEn.addSource(currentPagePosition){
+            value -> myModel.getDayStringEn(value)
+        }
+        currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/13"))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
             value -> currentRewardStr.value = "$value　円"
         }
+
     }
+    
     fun getDayStrJpBefore(int: Int):String{
         return myModel.getDayStringJp(int)
     }
@@ -46,6 +53,10 @@ class MainViewModel : ViewModel() {
         myModel.saveRewardToPreference(reward,_context)
     }
 }
+
+ fun MutableLiveData<Int>.valueOrZero() : Int{
+      return this.value ?: 0
+ }
 
 // ViewModel 　Viewの状態保持
 //　回転やアプリ切り替えなどでも破棄されない｡

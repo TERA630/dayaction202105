@@ -14,27 +14,27 @@ const val ARG_POSITION = "argumentPosition"
 
 class MainFragment : Fragment() {
     private val pageViewModel: MainViewModel by activityViewModels()
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentMainBinding.inflate(inflater, container, false)
-        val root = binding.root
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
             justifyContent = JustifyContent.FLEX_START
             alignItems = AlignItems.FLEX_START
         }
-        val currentPosition =  this.arguments?.getInt(ARG_POSITION) ?: 10
-        val backDate = 10 - currentPosition
+        pageViewModel.currentPagePosition = this.arguments?.getInt(ARG_POSITION) ?: 10
+        val backDate = 10 - pageViewModel.currentPagePosition
         binding.dataShowing.text = pageViewModel.getDayStrJpBefore(backDate)
         pageViewModel.checkItemsHistory(backDate)
 
         binding.firstPageList.apply {
             layoutManager = flexBoxLayoutManager
-            adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)
+            adapter =
+                MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = pageViewModel)
         }
-
-        return root
+        return binding.root
     }
     companion object {
         @JvmStatic
