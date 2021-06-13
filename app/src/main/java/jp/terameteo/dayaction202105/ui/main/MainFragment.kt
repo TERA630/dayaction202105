@@ -27,7 +27,7 @@ class MainFragment : Fragment() {
         val currentPosition =  this.arguments?.getInt(ARG_POSITION) ?: 10
         val backDate = 10 - currentPosition
         binding.dataShowing.text = pageViewModel.getDayStrBefore(backDate)
-        
+
         binding.firstPageList.apply {
             layoutManager = flexBoxLayoutManager
             adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner,viewModel = pageViewModel)

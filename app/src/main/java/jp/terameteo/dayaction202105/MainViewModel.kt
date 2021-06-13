@@ -9,7 +9,7 @@ import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<TodayItemEntity>()
-    var currentDate = "19xx/12/31"
+    var currentDateJp = "19xx/12/31"
     var currentPagePosition = 10
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
@@ -20,9 +20,10 @@ class MainViewModel : ViewModel() {
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
         currentItems.clear()
-        currentDate = myModel.getDayStringJp(0)
-        currentItems.addAll(myModel.getItemsOfDay(_context,myModel.getDayString(0)))
-         currentCategory.addAll(myModel.makeCategoryList(currentItems))
+        currentDateJp = myModel.getDayStringJp(0)
+        val targetDateEn = myModel.getDayString(0)
+        currentItems.addAll(myModel.getItemsOfDay(_context,targetDateEn))
+        currentCategory.addAll(myModel.makeCategoryList(currentItems))
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
             value -> currentRewardStr.value = "$value　円"

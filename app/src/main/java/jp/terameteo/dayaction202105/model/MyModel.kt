@@ -26,7 +26,7 @@ class MyModel {
     fun getDayString(backDate: Int):String{
         val date = LocalDate.now().minusDays(backDate.toLong())
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
-        return  SimpleDateFormat("yyyy/MM/dd",Locale.ENGLISH).format(javaUtilDate)
+        return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
     }
     fun getItemsOfDay (_context: Context,dateStr:String) :List<TodayItemEntity> {
         val items = getStoredItemFromResource(_context)
