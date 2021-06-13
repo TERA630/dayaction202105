@@ -26,7 +26,8 @@ class MainFragment : Fragment() {
         }
         val currentPosition =  this.arguments?.getInt(ARG_POSITION) ?: 10
         val backDate = 10 - currentPosition
-        binding.dataShowing.text = pageViewModel.getDayStrBefore(backDate)
+        binding.dataShowing.text = pageViewModel.getDayStrJpBefore(backDate)
+        pageViewModel.checkItemsHistory(backDate)
 
         binding.firstPageList.apply {
             layoutManager = flexBoxLayoutManager

@@ -23,7 +23,7 @@ class MyModel {
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return SimpleDateFormat(pattern, local).format(javaUtilDate)
     } // 0：本日　1～：backDate日前を返す｡
-    fun getDayString(backDate: Int):String{
+    fun getDayStringEn (backDate: Int):String{
         val date = LocalDate.now().minusDays(backDate.toLong())
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
@@ -33,7 +33,7 @@ class MyModel {
         val newItems = MutableList(items.size) { i ->
             TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category,
                 isChecked = (dateStr.toRegex().containsMatchIn(items[i].finishedHistory)),
-                shouldDoToday = true )
+                shouldDoToday = true,finishedHistory = items[i].finishedHistory)
         }
         return newItems
     }
@@ -99,10 +99,6 @@ data class TodayItemEntity(
     var reward: Int = 30,
     var category: String = "",
     var shouldDoToday: Boolean = true,
-    var isChecked: Boolean = false
+    var isChecked: Boolean = false,
+    var finishedHistory: String = ""
 )
-
-
-
-
-

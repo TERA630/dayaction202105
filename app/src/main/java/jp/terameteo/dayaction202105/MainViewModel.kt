@@ -21,7 +21,7 @@ class MainViewModel : ViewModel() {
         myModel = MyModel()
         currentItems.clear()
         currentDateJp = myModel.getDayStringJp(0)
-        val targetDateEn = myModel.getDayString(0)
+        val targetDateEn = myModel.getDayStringEn(0)
         currentItems.addAll(myModel.getItemsOfDay(_context,targetDateEn))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
@@ -29,8 +29,17 @@ class MainViewModel : ViewModel() {
             value -> currentRewardStr.value = "$value　円"
         }
     }
-    fun getDayStrBefore(int: Int):String{
+    fun getDayStrJpBefore(int: Int):String{
         return myModel.getDayStringJp(int)
+    }
+    fun getDayStrEnBefore(int: Int):String{
+        return myModel.getDayStringEn(int)
+    }
+    fun checkItemsHistory(int:Int){
+        if (currentItems.isNullOrEmpty()) return
+        for(i in currentItems.indices){
+            currentItems[i].isChecked = (getDayStrEnBefore(int).toRegex().containsMatchIn(currentItems[i].finishedHistory))
+        }
     }
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
