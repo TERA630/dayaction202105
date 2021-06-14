@@ -12,10 +12,7 @@ import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
 import jp.terameteo.dayaction202105.ui.main.MainFragmentStateAdapter
 
 // TODO クリック時のイベント
-// TODO 自動カテゴリ分け タブ作成
 // TODO ROOM 実装
-// TODO
-
 
 class MainActivity : AppCompatActivity() {
     // androidx.fragment.app.Fragment Activity -> androidx.appcompat.app.AppCompatActivity
@@ -32,19 +29,20 @@ class MainActivity : AppCompatActivity() {
         val rewardLabel = binding.achievement
         rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
-        val viewPager = binding.pager
-        viewPager.adapter = MainFragmentStateAdapter(this)
-        viewPager.currentItem = 10
+        val viewPager = binding.pager.apply {
+            adapter = MainFragmentStateAdapter(this@MainActivity)
+            currentItem = 10
+            setPageTransformer(ZoomOutPageTransformer())
+        }
+
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 viewModel.currentPagePosition.postValue(position)
-                Log.i("viewpager","now position = $position")
+                Log.i("viewpager"," position = $position")
                 super.onPageSelected(position)
             }
 
         })
-        viewPager.setPageTransformer(ZoomOutPageTransformer())
-
         val fab: FloatingActionButton = binding.fab
 
         viewModel.currentReward.observe(this){
