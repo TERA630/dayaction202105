@@ -1,6 +1,7 @@
 package jp.terameteo.dayaction202105.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,25 +10,35 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.flexbox.*
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
+import jp.terameteo.dayaction202105.valueOrZero
 
 const val ARG_POSITION = "argumentPosition"
 
 class MainFragment : Fragment() {
     private val pageViewModel: MainViewModel by activityViewModels()
+    private lateinit var binding:FragmentMainBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
             justifyContent = JustifyContent.FLEX_START
             alignItems = AlignItems.FLEX_START
         }
-        pageViewModel.currentPagePosition = this.arguments?.getInt(ARG_POSITION) ?: 10
-        val backDate = 10 - pageViewModel.currentPagePosition
-        binding.dataShowing.text = pageViewModel.getDayStrJpBefore(backDate)
-        pageViewModel.checkItemsHistory(backDate)
+
+  //    binding.dataShowing.text = pageViewModel.currentDateJp.value
+        val positionNow = pageViewModel.currentPagePosition.valueOrZero()
+        val dateEn = pageViewModel.currentDateEn.value
+        pageViewModel.currentDateEn.observe(viewLifecycleOwner){
+            Log.i("fragment","position is $positionNow and dateEn $it")
+        }
+        pageViewModel.currentDateJp.observe(
+            viewLifecycleOwner, {
+                binding.dataShowing.text = it
+                Log.i("fragment","position is $positionNow and dateJp $dateEn")}
+        )
 
         binding.firstPageList.apply {
             layoutManager = flexBoxLayoutManager

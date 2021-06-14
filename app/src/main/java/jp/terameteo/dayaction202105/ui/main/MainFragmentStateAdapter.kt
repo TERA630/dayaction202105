@@ -10,4 +10,6 @@ class MainFragmentStateAdapter(fragmentActivity:FragmentActivity)
         override fun createFragment(position: Int): Fragment {
             return MainFragment.newInstance(position)
         }
+
 }
+

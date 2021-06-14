@@ -11,7 +11,7 @@ class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<TodayItemEntity>()
     var currentDateJp  = MediatorLiveData<String>()
     var currentDateEn  = MediatorLiveData<String>()
-    var currentPagePosition = MutableLiveData(10)
+    var currentPagePosition = MutableLiveData<Int>()
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = emptyList<String>().toMutableList()
@@ -20,26 +20,26 @@ class MainViewModel : ViewModel() {
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        currentItems.clear()
+        currentDateJp.value = myModel.getDayStringJp(0)
         currentDateJp.addSource(currentPagePosition){
-            value -> myModel.getDayStringJp(value)
-        }
+                value -> currentDateJp.postValue(myModel.getDayStringJp(10-value)) }
+        currentDateEn.value = myModel.getDayStringEn(0)
         currentDateEn.addSource(currentPagePosition){
-            value -> myModel.getDayStringEn(value)
-        }
-        currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/13"))
-        currentCategory.addAll(myModel.makeCategoryList(currentItems))
+                value -> currentDateEn.postValue(myModel.getDayStringEn(10-value)) }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
-            value -> currentRewardStr.value = "$value　円"
-        }
+                value -> currentRewardStr.postValue("$value　円") }
+        currentPagePosition.postValue(10)
+        currentItems.clear()
+        currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/13"))
+        currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
     }
     
     fun getDayStrJpBefore(int: Int):String{
         return myModel.getDayStringJp(int)
     }
-    fun getDayStrEnBefore(int: Int):String{
+    private fun getDayStrEnBefore(int: Int):String{
         return myModel.getDayStringEn(int)
     }
     fun checkItemsHistory(int:Int){

@@ -3,6 +3,7 @@ package jp.terameteo.dayaction202105.model
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
+import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.room.PrimaryKey
 import jp.terameteo.dayaction202105.R
@@ -20,6 +21,7 @@ class MyModel {
         val local = Locale.JAPAN
         val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
         val date = LocalDate.now().minusDays(backDate.toLong())
+        Log.i("model","currentDate is ${LocalDate.now()}")
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return SimpleDateFormat(pattern, local).format(javaUtilDate)
     } // 0：本日　1～：backDate日前を返す｡

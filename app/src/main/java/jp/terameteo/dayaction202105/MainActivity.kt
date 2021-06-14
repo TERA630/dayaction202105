@@ -1,8 +1,10 @@
 package jp.terameteo.dayaction202105
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
@@ -33,6 +35,14 @@ class MainActivity : AppCompatActivity() {
         val viewPager = binding.pager
         viewPager.adapter = MainFragmentStateAdapter(this)
         viewPager.currentItem = 10
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                viewModel.currentPagePosition.postValue(position)
+                Log.i("viewpager","now position = $position")
+                super.onPageSelected(position)
+            }
+
+        })
         viewPager.setPageTransformer(ZoomOutPageTransformer())
 
         val fab: FloatingActionButton = binding.fab
