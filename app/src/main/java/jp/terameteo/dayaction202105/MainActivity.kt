@@ -31,23 +31,19 @@ class MainActivity : AppCompatActivity() {
 
         val viewPager = binding.pager.apply {
             adapter = MainFragmentStateAdapter(this@MainActivity)
-            currentItem = 10
+            currentItem = 10 // position 0-9
             setPageTransformer(ZoomOutPageTransformer())
         }
-
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 viewModel.currentPagePosition.postValue(position)
                 Log.i("viewpager"," position = $position")
             }
-
         })
         val fab: FloatingActionButton = binding.fab
-
         viewModel.currentReward.observe(this){
             rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
         }
-
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -61,4 +57,4 @@ class MainActivity : AppCompatActivity() {
 //　Activityのみでアプリケーションを完結させようとすると､
 //　端末の回転時やアプリケーションの切り替え時に表示状態(State)の保持に苦労する｡
 //　2017年頃までには回転させない､Activity再生成させない､onSavedInstanceStateを使うなど
-//　あったが､現状では状態の保持はViewModelに委譲するのが主流｡
+//　あったが､状態の保持はViewModelに委譲するのが現在の主流｡

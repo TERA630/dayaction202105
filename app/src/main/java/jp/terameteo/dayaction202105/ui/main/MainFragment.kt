@@ -37,8 +37,7 @@ class MainFragment : Fragment() {
         }
         pageViewModel.currentDateJp.observe(
             viewLifecycleOwner, {
-                binding.dataShowing.text = it
-                Log.i("fragment","position is $positionNow and dateJp $it")}
+                binding.dataShowing.text = it }
         )
 
         binding.firstPageList.apply {
