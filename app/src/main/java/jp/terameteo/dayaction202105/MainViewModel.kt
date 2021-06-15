@@ -20,33 +20,27 @@ class MainViewModel : ViewModel() {
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        currentPagePosition.postValue(10)
+        currentPagePosition.postValue(9)
      //   currentDateJp.value = myModel.getDayStringJp(0)
     //    currentDateEn.value = myModel.getDayStringEn(0)
         currentDateJp.addSource(currentPagePosition){
-                value -> currentDateJp.postValue(myModel.getDayStringJp(10-value)) }
+                value -> currentDateJp.postValue(myModel.getDayStringJp(9-value)) }
         currentDateEn.addSource(currentPagePosition){
-                value -> currentDateEn.postValue(myModel.getDayStringEn(10-value)) }
+                value -> currentDateEn.postValue(myModel.getDayStringEn(9-value)) }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
                 value -> currentRewardStr.postValue("$value　円") }
 
         currentItems.clear()
-        currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/13"))
+        currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/15"))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
     }
-    
-    fun getDayStrJpBefore(int: Int):String{
-        return myModel.getDayStringJp(int)
-    }
-    private fun getDayStrEnBefore(int: Int):String{
-        return myModel.getDayStringEn(int)
-    }
-    fun checkItemsHistory(int:Int){
+
+    fun checkItemsHistory( str:String ){
         if (currentItems.isNullOrEmpty()) return
         for(i in currentItems.indices){
-            currentItems[i].isChecked = (getDayStrEnBefore(int).toRegex().containsMatchIn(currentItems[i].finishedHistory))
+            currentItems[i].isChecked = (str.toRegex().containsMatchIn(currentItems[i].finishedHistory))
         }
     }
     fun stateSave(_context: Context) {

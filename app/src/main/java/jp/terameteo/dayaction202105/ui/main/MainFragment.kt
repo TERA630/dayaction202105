@@ -33,6 +33,7 @@ class MainFragment : Fragment() {
 
         pageViewModel.currentDateEn.observe(viewLifecycleOwner){
             Log.i("fragment","position is $positionNow and dateEn $it")
+            pageViewModel.checkItemsHistory(it)
         }
         pageViewModel.currentDateJp.observe(
             viewLifecycleOwner, {
