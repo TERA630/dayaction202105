@@ -30,14 +30,14 @@ class MainFragment : Fragment() {
 
   //    binding.dataShowing.text = pageViewModel.currentDateJp.value
         val positionNow = pageViewModel.currentPagePosition.valueOrZero()
-        val dateEn = pageViewModel.currentDateEn.value
+
         pageViewModel.currentDateEn.observe(viewLifecycleOwner){
             Log.i("fragment","position is $positionNow and dateEn $it")
         }
         pageViewModel.currentDateJp.observe(
             viewLifecycleOwner, {
                 binding.dataShowing.text = it
-                Log.i("fragment","position is $positionNow and dateJp $dateEn")}
+                Log.i("fragment","position is $positionNow and dateJp $it")}
         )
 
         binding.firstPageList.apply {

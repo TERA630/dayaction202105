@@ -20,16 +20,17 @@ class MainViewModel : ViewModel() {
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        currentDateJp.value = myModel.getDayStringJp(0)
+        currentPagePosition.postValue(10)
+     //   currentDateJp.value = myModel.getDayStringJp(0)
+    //    currentDateEn.value = myModel.getDayStringEn(0)
         currentDateJp.addSource(currentPagePosition){
                 value -> currentDateJp.postValue(myModel.getDayStringJp(10-value)) }
-        currentDateEn.value = myModel.getDayStringEn(0)
         currentDateEn.addSource(currentPagePosition){
                 value -> currentDateEn.postValue(myModel.getDayStringEn(10-value)) }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
                 value -> currentRewardStr.postValue("$value　円") }
-        currentPagePosition.postValue(10)
+
         currentItems.clear()
         currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/13"))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))

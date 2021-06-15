@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 viewModel.currentPagePosition.postValue(position)
                 Log.i("viewpager"," position = $position")
-                super.onPageSelected(position)
             }
 
         })
