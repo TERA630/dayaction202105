@@ -10,8 +10,9 @@ import jp.terameteo.dayaction202105.model.TodayItemEntity
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<TodayItemEntity>()
     var currentDateJp  = MediatorLiveData<String>()
+    val  dateJpList = MutableList(10){"1970年1月1日(木)"}
     var currentDateEn  = MediatorLiveData<String>()
-    var currentPagePosition = MutableLiveData<Int>()
+    val dateEnList = MutableList(10){"1970/1/1"}
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = emptyList<String>().toMutableList()
@@ -20,32 +21,28 @@ class MainViewModel : ViewModel() {
     fun initialize(_context:Context){
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        currentPagePosition.postValue(9)
-     //   currentDateJp.value = myModel.getDayStringJp(0)
-    //    currentDateEn.value = myModel.getDayStringEn(0)
-        currentDateJp.addSource(currentPagePosition){
-                value -> currentDateJp.postValue(myModel.getDayStringJp(9-value)) }
-        currentDateEn.addSource(currentPagePosition){
-                value -> currentDateEn.postValue(myModel.getDayStringEn(9-value)) }
+        for(i in 0..9){
+            dateEnList[i] = myModel.getDayStringEn(9-i)
+        }
+        for(i in 0..9){
+            dateJpList[i] = myModel.getDayStringJp(9-i)
+        }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
                 value -> currentRewardStr.postValue("$value　円") }
 
         currentItems.clear()
-        currentItems.addAll(myModel.getItemsOfDay(_context,currentDateEn.value?:"2021/6/15"))
+        currentItems.addAll(myModel.getItemsOfDay(_context,dateEnList[9]))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
     }
 
-    fun checkItemsHistory( str:String ){
-        if (currentItems.isNullOrEmpty()) return
-        for(i in currentItems.indices){
-            currentItems[i].isChecked = (str.toRegex().containsMatchIn(currentItems[i].finishedHistory))
-        }
-    }
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)
+    }
+    fun isItemDone(item: TodayItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
+        return dateStr.toRegex().containsMatchIn(item.finishedHistory)
     }
 }
 

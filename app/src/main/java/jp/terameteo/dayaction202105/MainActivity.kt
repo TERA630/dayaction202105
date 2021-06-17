@@ -1,14 +1,10 @@
 package jp.terameteo.dayaction202105
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
-
 import jp.terameteo.dayaction202105.ui.main.MainFragmentStateAdapter
 
 // TODO クリック時のイベント
@@ -34,19 +30,9 @@ class MainActivity : AppCompatActivity() {
             currentItem = 10 // position 0-9
             setPageTransformer(ZoomOutPageTransformer())
         }
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
-            override fun onPageSelected(position: Int) {
-                viewModel.currentPagePosition.postValue(position)
-                Log.i("viewpager"," position = $position")
-            }
-        })
         val fab: FloatingActionButton = binding.fab
         viewModel.currentReward.observe(this){
             rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
-        }
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
         }
     }
     override fun onPause() {

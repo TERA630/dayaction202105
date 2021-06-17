@@ -10,9 +10,8 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.flexbox.*
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
-import jp.terameteo.dayaction202105.valueOrZero
 
-const val ARG_POSITION = "argumentPosition"
+const val ARG_POSITION = "positionOfThisFragment"
 
 class MainFragment : Fragment() {
     private val pageViewModel: MainViewModel by activityViewModels()
@@ -27,23 +26,17 @@ class MainFragment : Fragment() {
             justifyContent = JustifyContent.FLEX_START
             alignItems = AlignItems.FLEX_START
         }
-
-  //    binding.dataShowing.text = pageViewModel.currentDateJp.value
-        val positionNow = pageViewModel.currentPagePosition.valueOrZero()
+        val positionOfArgumentOfFragment = this.arguments?.getInt(ARG_POSITION) ?:0
 
         pageViewModel.currentDateEn.observe(viewLifecycleOwner){
-            Log.i("fragment","position is $positionNow and dateEn $it")
-            pageViewModel.checkItemsHistory(it)
+            Log.i("fragment","Pos is $positionOfArgumentOfFragment from list is ${pageViewModel.dateEnList[positionOfArgumentOfFragment]}")
         }
-        pageViewModel.currentDateJp.observe(
-            viewLifecycleOwner, {
-                binding.dataShowing.text = it }
-        )
+        binding.dataShowing.text = pageViewModel.dateJpList[positionOfArgumentOfFragment]
 
         binding.firstPageList.apply {
             layoutManager = flexBoxLayoutManager
             adapter =
-                MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = pageViewModel)
+                MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = pageViewModel,positionOfArgumentOfFragment)
         }
         return binding.root
     }

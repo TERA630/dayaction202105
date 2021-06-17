@@ -13,7 +13,8 @@ import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
-    private val viewModel: MainViewModel
+    private val viewModel: MainViewModel,
+    private val pagePosition:Int
 ) :
     androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
     override fun getItemCount(): Int = viewModel.currentItems.size
@@ -33,7 +34,7 @@ class MainListAdaptor(
 
         val thisCellView = holder.binding.cellText
         thisCellView.text = viewModel.currentItems[position].title
-        val currentStyle = if (viewModel.currentItems[position].isChecked) {
+        val currentStyle = if (viewModel.isItemDone(viewModel.currentItems[position],viewModel.dateEnList[pagePosition])) {
             R.drawable.square_gold_gradient
         } else {
             R.drawable.square_silver_gradient

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">dayaction202105</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    　　
     <string name="date_placeHolder">%1$s年%2$s月%3$s日</string>
     <string name="reward_placeHolder">%1d円</string>
     <string name="save">保存</string>
@@ -34,6 +31,10 @@
         <item>股関節の柔軟;30;運動</item>
         <item>自転車の掃除;30;Weekly</item>
         <item>家計;60;Monthly</item>
-        <item>不動産入出金;60;Monthly</item>
+        <item>6/16;10;Daily;2021/6/16</item>
+        <item>6/15;10;Daily;2021/6/15</item>
+        <item>6/14;10;Daily;2021/6/14</item>
+        <item>6/13;10;Daily;2021/6/13</item>
+        <item>6/12;10;Daily;2021/6/12</item>
         </string-array>
 </resources>

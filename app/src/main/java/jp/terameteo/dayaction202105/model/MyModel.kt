@@ -30,14 +30,15 @@ class MyModel {
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
     }
-    fun getItemsOfDay (_context: Context,dateStr:String) :List<TodayItemEntity> {
+    fun getItemsOfDay(_context: Context, dateStr: String): List<TodayItemEntity> {
         val items = getStoredItemFromResource(_context)
-        val newItems = MutableList(items.size) { i ->
-            TodayItemEntity(items[i].id,items[i].title,items[i].reward,items[i].category,
+        return MutableList(items.size) { i ->
+            TodayItemEntity(
+                items[i].id, items[i].title, items[i].reward, items[i].category,
                 isChecked = (dateStr.toRegex().containsMatchIn(items[i].finishedHistory)),
-                shouldDoToday = true,finishedHistory = items[i].finishedHistory)
+                shouldDoToday = true, finishedHistory = items[i].finishedHistory
+            )
         }
-        return newItems
     }
     private fun getStoredItemFromResource(_context: Context): List<StoredItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
@@ -84,6 +85,28 @@ class MyModel {
         val preferenceEditor = _context.getSharedPreferences(REWARD_HISTORY, Context.MODE_PRIVATE).edit()
         preferenceEditor.putInt(REWARD_HISTORY, reward)
         preferenceEditor.apply()
+    }
+    fun appendDateToItem(itemEntity: TodayItemEntity,dateStr:String) {
+        val dateList = itemEntity.finishedHistory.split(",").toMutableList()
+        if(dateStr.matches("20[0-9]{2}/([1-9]|1[0-2])/([1-9]|[12][0-9]|3[01])".toRegex())){
+            dateList.add(dateStr)
+            dateList.sort()
+            val newDateList = dateList.joinToString(",")
+            itemEntity.finishedHistory = newDateList
+        } else {
+            Log.w("model","date Appending was fail")
+        }
+    }
+    fun deleteDateFromItem(itemEntity:TodayItemEntity,dateStr: String){
+        val dateList = itemEntity.finishedHistory.split(",").toMutableList()
+        if(dateList.contains(dateStr)){
+            dateList.remove(dateStr)
+            val newDateList = dateList.joinToString (",")
+            itemEntity.finishedHistory = newDateList
+        } else {
+            Log.w("model","date deleting was fail")
+        }
+
     }
 }
 
