@@ -10,11 +10,12 @@ import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 import jp.terameteo.dayaction202105.model.TodayItemEntity
+import jp.terameteo.dayaction202105.valueOrZero
 
 class MainListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
     private val viewModel: MainViewModel,
-    private val pagePosition:Int
+    private val page:Int
 ) :
     androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
     override fun getItemCount(): Int = viewModel.currentItems.size
@@ -31,10 +32,10 @@ class MainListAdaptor(
 
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
-
+        val item = viewModel.currentItems[position]
         val thisCellView = holder.binding.cellText
-        thisCellView.text = viewModel.currentItems[position].title
-        val currentStyle = if (viewModel.isItemDone(viewModel.currentItems[position],viewModel.dateEnList[pagePosition])) {
+        thisCellView.text = item.title
+        val currentStyle = if (viewModel.isItemDone(item,viewModel.dateEnList[page])) {
             R.drawable.square_gold_gradient
         } else {
             R.drawable.square_silver_gradient
@@ -42,15 +43,15 @@ class MainListAdaptor(
         thisCellView.background = ResourcesCompat.getDrawable(thisCellView.resources, currentStyle, thisCellView.context.theme)
 
         thisCellView.setOnClickListener {
-            val currentValue =  viewModel.currentReward.value ?: 0
-            if (viewModel.currentItems[position].isChecked) {
+            val currentValue =  viewModel.currentReward.valueOrZero()
+            if ( viewModel.isItemDone(item,viewModel.dateEnList[page])) {
                 // アイテムがチェック済み チェックをはずす
-                viewModel.currentItems[position].isChecked = false
-                val newValue = currentValue - viewModel.currentItems[position].reward
+                viewModel.removeDateFrom(item,viewModel.dateEnList[page])
+                val newValue = currentValue - item.reward
                 viewModel.currentReward.postValue(newValue)
             } else {
-                viewModel.currentItems[position].isChecked = true
-                val newValue = currentValue + viewModel.currentItems[position].reward
+                viewModel.appendDateTo(item,viewModel.dateEnList[page])
+                val newValue = currentValue + item.reward
                 viewModel.currentReward.postValue(newValue)
             }
             notifyItemChanged(position)

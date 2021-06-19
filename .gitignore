@@ -27,14 +27,15 @@ local.properties
 .navigation/
 /captures
 
-#
-
-
-.gradle
+# Local configuration file (sdk path, etc)
 /local.properties
-/.idea/caches
-# Intellij
+#Gradle generated files
+.gradle
 
+
+# Intellij
+/.idea/caches
+/.idea/libraries/
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/tasks.xml
@@ -44,3 +45,4 @@ local.properties
 
 .externalNativeBuild
 .cxx
+

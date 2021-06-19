@@ -9,8 +9,7 @@ import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<TodayItemEntity>()
-    var currentDateJp  = MediatorLiveData<String>()
-    val  dateJpList = MutableList(10){"1970年1月1日(木)"}
+    val dateJpList = MutableList(10){"1970年1月1日(木)"}
     var currentDateEn  = MediatorLiveData<String>()
     val dateEnList = MutableList(10){"1970/1/1"}
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
@@ -36,7 +35,12 @@ class MainViewModel : ViewModel() {
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
     }
-
+    fun appendDateTo(item: TodayItemEntity,dateStr: String){
+        myModel.appendDateToItem(item,dateStr)
+    }
+    fun removeDateFrom(item:TodayItemEntity,dateStr: String){
+        myModel.deleteDateFromItem(item,dateStr)
+    }
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)

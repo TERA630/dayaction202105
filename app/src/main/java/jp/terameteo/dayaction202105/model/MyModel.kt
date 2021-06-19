@@ -13,7 +13,6 @@ import java.util.*
 
 const val ERROR_TITLE = "error title"
 const val ERROR_CATEGORY = "error category"
-
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
@@ -31,7 +30,7 @@ class MyModel {
         return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
     }
     fun getItemsOfDay(_context: Context, dateStr: String): List<TodayItemEntity> {
-        val items = getStoredItemFromResource(_context)
+        val items = parseItemFromResource(_context)
         return MutableList(items.size) { i ->
             TodayItemEntity(
                 items[i].id, items[i].title, items[i].reward, items[i].category,
@@ -40,7 +39,7 @@ class MyModel {
             )
         }
     }
-    private fun getStoredItemFromResource(_context: Context): List<StoredItemEntity> {
+    private fun parseItemFromResource(_context: Context): List<StoredItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
         return List(itemsFromResource.size) { index ->
             convertStringToStoredItem(index, itemsFromResource[index])
