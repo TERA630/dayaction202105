@@ -5,6 +5,7 @@ import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
 import android.util.Log
 import androidx.core.text.isDigitsOnly
+import androidx.room.Room
 import jp.terameteo.dayaction202105.R
 import java.time.LocalDate
 import java.time.ZoneId
@@ -15,6 +16,14 @@ const val ERROR_CATEGORY = "error category"
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
+    private lateinit var  db: ItemCollectionDB
+    private lateinit var dao: ItemCollectionDAO
+
+    fun initializeDB( _context: Context) {
+         db = Room.databaseBuilder(_context, ItemCollectionDB::class.java, "collection_item").build()
+         dao = db.itemCollectionDAO()
+        return
+    } // MakeItemListの前に実行
     fun getDayStringJp(backDate:Int): String {
         val local = Locale.JAPAN
         val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
@@ -28,22 +37,21 @@ class MyModel {
         return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
     }
 
-    fun makeItemListFromResource(_context: Context): List<ItemEntity> {
+    private fun makeItemListFromResource(_context: Context): List<ItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
         return List(itemsFromResource.size) { index ->
             parseToItem(index, itemsFromResource[index])
         }
     }
-    fun makeItemList(_context: Context,dao: ItemCollectionDAO):List<ItemEntity>{
+    suspend fun makeItemList(_context: Context):List<ItemEntity>{
         val roomList = dao.getAll()
         return if(roomList.isEmpty()){ makeItemListFromResource(_context)}
         else { roomList}
     }
-
-
-    private fun convertItemToString(storedItemEntity: ItemEntity): String { // ItemEntity が変われば直す必要あり
-        return storedItemEntity.title + ";" + storedItemEntity.reward + ";" + storedItemEntity.category + ";" + storedItemEntity.finishedHistory
+    suspend fun insertItem(itemEntity: ItemEntity){
+        dao.insert(itemEntity)
     }
+
     private fun parseToItem(id:Int, _string: String): ItemEntity {
         // 入力： string = "title ; reward ; category ; finishedHistory"
         // 出力： storedItem (title,reward,category,finishedHistory )を返す｡

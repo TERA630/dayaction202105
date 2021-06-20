@@ -4,13 +4,14 @@ import android.content.Context
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
-import jp.terameteo.dayaction202105.model.ItemCollectionDB
+import androidx.lifecycle.viewModelScope
 import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.model.MyModel
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<ItemEntity>()
+    val liveList = MutableLiveData<List<ItemEntity>>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
     val dateEnList = MutableList(10){"1970/1/1"}
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
@@ -18,30 +19,27 @@ class MainViewModel : ViewModel() {
     val currentCategory = emptyList<String>().toMutableList()
     private lateinit var myModel: MyModel
 
-    fun initialize(_context:Context){
+    fun initialize(_context:Context) {
         // TODO 後でROOMからデータを取れる様にする
         myModel = MyModel()
-        for(i in 0..9){
-            dateEnList[i] = myModel.getDayStringEn(9-i)
+        myModel.initializeDB(_context)
+        for (i in 0..9) {
+            dateEnList[i] = myModel.getDayStringEn(9 - i)
         }
-        for(i in 0..9){
-            dateJpList[i] = myModel.getDayStringJp(9-i)
+        for (i in 0..9) {
+            dateJpList[i] = myModel.getDayStringJp(9 - i)
         }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
-        currentRewardStr.addSource(currentReward){
-                value -> currentRewardStr.postValue("$value　円") }
-
+        currentRewardStr.addSource(currentReward) { value -> currentRewardStr.postValue("$value　円") }
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
-        val db = Room.databaseBuilder(_context,ItemCollectionDB::class.java,"collection_item").build()
-        val dao = db.itemCollectionDAO()
-        myModel.makeItemList(_context,dao)
 
-
-
-
-        currentItems.clear()
-        currentItems.addAll(myModel.makeItemListFromResource(_context))
+        viewModelScope.launch {
+            val list = myModel.makeItemList(_context )
+            currentItems.clear()
+            currentItems.addAll(list)
+            liveList.postValue(currentItems)
+        }
     }
     fun appendDateTo(item: ItemEntity, dateStr: String){
         myModel.appendDateToItem(item,dateStr)
@@ -52,6 +50,16 @@ class MainViewModel : ViewModel() {
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)
+        val list = List(liveList.value?.size ?:0 ){
+            index -> liveList.safetyGet(index)
+        }
+        for(i in list.indices) {
+            if (list[i].title == "making") continue
+            viewModelScope.launch {
+                myModel.insertItem(list[i])
+            }
+        }
+
     }
     fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
         return dateStr.toRegex().containsMatchIn(item.finishedHistory)
@@ -61,7 +69,14 @@ class MainViewModel : ViewModel() {
  fun MutableLiveData<Int>.valueOrZero() : Int{
       return this.value ?: 0
  }
-
+fun MutableLiveData<List<ItemEntity>>.safetyGet(position:Int): ItemEntity {
+    val list = this.value
+    return if (list.isNullOrEmpty()) {
+        ItemEntity(title = "making..")
+    } else {
+        list[position]
+    }
+}
 // ViewModel
 //　回転やアプリ切り替えなどでも破棄されない｡
 // ActivityやFragmentはObserveして変更があればUI更新

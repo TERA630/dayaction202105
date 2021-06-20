@@ -25,13 +25,12 @@ class MainFragment : Fragment() {
             justifyContent = JustifyContent.FLEX_START
             alignItems = AlignItems.FLEX_START
         }
-        val positionOfArgumentOfFragment = this.arguments?.getInt(ARG_POSITION) ?:0
-        binding.dataShowing.text = pageViewModel.dateJpList[positionOfArgumentOfFragment]
-
+        val page = this.arguments?.getInt(ARG_POSITION) ?:0
+        binding.dataShowing.text = pageViewModel.dateJpList[page]
         binding.firstPageList.apply {
             layoutManager = flexBoxLayoutManager
             adapter =
-                MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = pageViewModel,positionOfArgumentOfFragment)
+                MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = pageViewModel,page)
         }
         return binding.root
     }
