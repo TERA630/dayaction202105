@@ -5,7 +5,7 @@ import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
 import android.util.Log
 import androidx.core.text.isDigitsOnly
-import androidx.room.PrimaryKey
+import androidx.room.Room
 import jp.terameteo.dayaction202105.R
 import java.time.LocalDate
 import java.time.ZoneId
@@ -13,15 +13,21 @@ import java.util.*
 
 const val ERROR_TITLE = "error title"
 const val ERROR_CATEGORY = "error category"
-
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
+    private lateinit var  db: ItemCollectionDB
+    private lateinit var dao: ItemCollectionDAO
+
+    fun initializeDB( _context: Context) {
+         db = Room.databaseBuilder(_context, ItemCollectionDB::class.java, "collection_item").build()
+         dao = db.itemCollectionDAO()
+        return
+    } // MakeItemListの前に実行
     fun getDayStringJp(backDate:Int): String {
         val local = Locale.JAPAN
         val pattern = DateFormat.getBestDateTimePattern(local, "YYYYEEEMMMd")
         val date = LocalDate.now().minusDays(backDate.toLong())
-        Log.i("model","currentDate is ${LocalDate.now()}")
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return SimpleDateFormat(pattern, local).format(javaUtilDate)
     } // 0：本日　1～：backDate日前を返す｡
@@ -30,28 +36,25 @@ class MyModel {
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
     }
-    fun getItemsOfDay(_context: Context, dateStr: String): List<TodayItemEntity> {
-        val items = getStoredItemFromResource(_context)
-        return MutableList(items.size) { i ->
-            TodayItemEntity(
-                items[i].id, items[i].title, items[i].reward, items[i].category,
-                isChecked = (dateStr.toRegex().containsMatchIn(items[i].finishedHistory)),
-                shouldDoToday = true, finishedHistory = items[i].finishedHistory
-            )
-        }
-    }
-    private fun getStoredItemFromResource(_context: Context): List<StoredItemEntity> {
+
+    private fun makeItemListFromResource(_context: Context): List<ItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
         return List(itemsFromResource.size) { index ->
-            convertStringToStoredItem(index, itemsFromResource[index])
+            parseToItem(index, itemsFromResource[index])
         }
     }
-    private fun convertItemToString(StoredItemEntity: StoredItemEntity): String { // ItemEntity が変われば直す必要あり
-        return StoredItemEntity.title + ";" + StoredItemEntity.reward + ";" + StoredItemEntity.category + ";" + StoredItemEntity.finishedHistory
+    suspend fun makeItemList(_context: Context):List<ItemEntity>{
+        val roomList = dao.getAll()
+        return if(roomList.isEmpty()){ makeItemListFromResource(_context)}
+        else { roomList}
     }
-    private fun convertStringToStoredItem(id:Int, _string: String): StoredItemEntity {
-        // string = "title ; reward ; category ; finishedHistory" を与えられ､
-        // storedItem (title,reward,category,finishedHistory )を返す｡
+    suspend fun insertItem(itemEntity: ItemEntity){
+        dao.insert(itemEntity)
+    }
+
+    private fun parseToItem(id:Int, _string: String): ItemEntity {
+        // 入力： string = "title ; reward ; category ; finishedHistory"
+        // 出力： storedItem (title,reward,category,finishedHistory )を返す｡
         val elementList = _string.split(";").toMutableList()
 
         // 文字列が規則に従っているか
@@ -61,19 +64,19 @@ class MyModel {
 
         return if (elementList.size < 4) {
             // historyが無い場合
-            StoredItemEntity(id, title,reward,category,"")
+            ItemEntity(id, title,reward,category,shouldDoToday = true,finishedHistory = "")
         } else {
             // history がある場合
             if(elementList[3].matches("(20[0-9]{2}/([1-9]|1[0-2])/([1-9]|[12][0-9]|3[01]),?)+".toRegex())) {
                 // 年：2000-2099 /月： 1～9 or 10～12/ 日： 1～9　or　10～29　or　30,31の要素が一つでもあればマッチ
-                StoredItemEntity(id, title,reward,category,elementList[3])
+                ItemEntity(id, title,reward,category,shouldDoToday = true,finishedHistory = elementList[3])
             } else {
                 // マッチしなければ空文字列をHistoryに返しておく
-                StoredItemEntity(id,title,reward,category,"")
+                ItemEntity(id,title,reward,category,shouldDoToday = true,finishedHistory = "")
             }
         }
     }
-    fun makeCategoryList( _itemList:List<TodayItemEntity>) : List<String>{
+    fun makeCategoryList( _itemList:List<ItemEntity>) : List<String>{
         val categoryList = List(_itemList.size){index-> _itemList[index].category}
         return categoryList.distinct()
     }
@@ -86,7 +89,7 @@ class MyModel {
         preferenceEditor.putInt(REWARD_HISTORY, reward)
         preferenceEditor.apply()
     }
-    fun appendDateToItem(itemEntity: TodayItemEntity,dateStr:String) {
+    fun appendDateToItem(itemEntity: ItemEntity, dateStr:String) {
         val dateList = itemEntity.finishedHistory.split(",").toMutableList()
         if(dateStr.matches("20[0-9]{2}/([1-9]|1[0-2])/([1-9]|[12][0-9]|3[01])".toRegex())){
             dateList.add(dateStr)
@@ -97,7 +100,7 @@ class MyModel {
             Log.w("model","date Appending was fail")
         }
     }
-    fun deleteDateFromItem(itemEntity:TodayItemEntity,dateStr: String){
+    fun deleteDateFromItem(itemEntity:ItemEntity, dateStr: String){
         val dateList = itemEntity.finishedHistory.split(",").toMutableList()
         if(dateList.contains(dateStr)){
             dateList.remove(dateStr)
@@ -109,21 +112,3 @@ class MyModel {
 
     }
 }
-
-data class StoredItemEntity(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    var title: String = "unnamed",
-    var reward: Int = 30,
-    var category: String = "",
-    var finishedHistory: String = ""
-)
-
-data class TodayItemEntity(
-    var id:Int = 0,
-    var title: String = "unnamed",
-    var reward: Int = 30,
-    var category: String = "",
-    var shouldDoToday: Boolean = true,
-    var isChecked: Boolean = false,
-    var finishedHistory: String = ""
-)

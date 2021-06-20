@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val rewardLabel = binding.achievement
         rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
 
-        val viewPager = binding.pager.apply {
+        binding.pager.apply {
             adapter = MainFragmentStateAdapter(this@MainActivity)
             currentItem = 10 // position 0-9
             setPageTransformer(ZoomOutPageTransformer())
