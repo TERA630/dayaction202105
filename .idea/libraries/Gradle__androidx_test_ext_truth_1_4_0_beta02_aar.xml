@@ -1,9 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.test.ext:truth:1.4.0-beta02@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1a9bb467df237fc0b4704b00deb704e1/truth-1.4.0-beta02/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1a9bb467df237fc0b4704b00deb704e1/truth-1.4.0-beta02/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1a9bb467df237fc0b4704b00deb704e1/truth-1.4.0-beta02/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3ca38652babf2f427571f351d8e0ef30/truth-1.4.0-beta02/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3ca38652babf2f427571f351d8e0ef30/truth-1.4.0-beta02/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3ca38652babf2f427571f351d8e0ef30/truth-1.4.0-beta02/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test.ext/truth/1.4.0-beta02/e8fb2fcd4b40cded724e3e9d19f7e4c0a3875e14/truth-1.4.0-beta02-javadoc.jar!/" />
