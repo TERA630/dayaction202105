@@ -1,7 +1,6 @@
 package jp.terameteo.dayaction202105.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,10 +26,6 @@ class MainFragment : Fragment() {
             alignItems = AlignItems.FLEX_START
         }
         val positionOfArgumentOfFragment = this.arguments?.getInt(ARG_POSITION) ?:0
-
-        pageViewModel.currentDateEn.observe(viewLifecycleOwner){
-            Log.i("fragment","Pos is $positionOfArgumentOfFragment from list is ${pageViewModel.dateEnList[positionOfArgumentOfFragment]}")
-        }
         binding.dataShowing.text = pageViewModel.dateJpList[positionOfArgumentOfFragment]
 
         binding.firstPageList.apply {

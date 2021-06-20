@@ -34,6 +34,13 @@ class MyModel {
             parseToItem(index, itemsFromResource[index])
         }
     }
+    fun makeItemList(_context: Context,dao: ItemCollectionDAO):List<ItemEntity>{
+        val roomList = dao.getAll()
+        return if(roomList.isEmpty()){ makeItemListFromResource(_context)}
+        else { roomList}
+    }
+
+
     private fun convertItemToString(storedItemEntity: ItemEntity): String { // ItemEntity が変われば直す必要あり
         return storedItemEntity.title + ";" + storedItemEntity.reward + ";" + storedItemEntity.category + ";" + storedItemEntity.finishedHistory
     }

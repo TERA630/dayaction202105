@@ -7,16 +7,16 @@ interface ItemCollectionDAO {
     /** 全データ取得 */
 
     @Query("SELECT * FROM collection_item")
-    suspend fun getAll(): List<ItemEntity>
+     fun getAll(): List<ItemEntity>
     /** データ更新 */
     @Update
-    suspend fun update(item: ItemEntity)
+     fun update(item: ItemEntity)
     /** データ追加 */
     @Insert (onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(item: ItemEntity)
+     fun insert(item: ItemEntity)
     /** データ削除 */
     @Delete
-    suspend fun delete(item: ItemEntity)
+     fun delete(item: ItemEntity)
 
 }
 @Database(entities = [ItemEntity::class], version = 1) // 使うentityのクラスを渡す｡

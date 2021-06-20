@@ -4,13 +4,14 @@ import android.content.Context
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
+import jp.terameteo.dayaction202105.model.ItemCollectionDB
 import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.model.MyModel
 
 class MainViewModel : ViewModel() {
     val currentItems = mutableListOf<ItemEntity>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
-    var currentDateEn  = MediatorLiveData<String>()
     val dateEnList = MutableList(10){"1970/1/1"}
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
@@ -29,10 +30,18 @@ class MainViewModel : ViewModel() {
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
                 value -> currentRewardStr.postValue("$value　円") }
-        currentItems.clear()
-        currentItems.addAll(myModel.makeItemListFromResource(_context))
+
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
+        val db = Room.databaseBuilder(_context,ItemCollectionDB::class.java,"collection_item").build()
+        val dao = db.itemCollectionDAO()
+        myModel.makeItemList(_context,dao)
+
+
+
+
+        currentItems.clear()
+        currentItems.addAll(myModel.makeItemListFromResource(_context))
     }
     fun appendDateTo(item: ItemEntity, dateStr: String){
         myModel.appendDateToItem(item,dateStr)
