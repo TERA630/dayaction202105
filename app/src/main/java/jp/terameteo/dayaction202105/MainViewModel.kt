@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.model.MyModel
-import jp.terameteo.dayaction202105.model.TodayItemEntity
 
 class MainViewModel : ViewModel() {
-    val currentItems = mutableListOf<TodayItemEntity>()
+    val currentItems = mutableListOf<ItemEntity>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
     var currentDateEn  = MediatorLiveData<String>()
     val dateEnList = MutableList(10){"1970/1/1"}
@@ -29,23 +29,22 @@ class MainViewModel : ViewModel() {
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward){
                 value -> currentRewardStr.postValue("$value　円") }
-
         currentItems.clear()
-        currentItems.addAll(myModel.getItemsOfDay(_context,dateEnList[9]))
+        currentItems.addAll(myModel.makeItemListFromResource(_context))
         currentCategory.addAll(myModel.makeCategoryList(currentItems))
 
     }
-    fun appendDateTo(item: TodayItemEntity,dateStr: String){
+    fun appendDateTo(item: ItemEntity, dateStr: String){
         myModel.appendDateToItem(item,dateStr)
     }
-    fun removeDateFrom(item:TodayItemEntity,dateStr: String){
+    fun removeDateFrom(item:ItemEntity, dateStr: String){
         myModel.deleteDateFromItem(item,dateStr)
     }
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)
     }
-    fun isItemDone(item: TodayItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
+    fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
         return dateStr.toRegex().containsMatchIn(item.finishedHistory)
     }
 }
@@ -54,13 +53,11 @@ class MainViewModel : ViewModel() {
       return this.value ?: 0
  }
 
-// ViewModel 　Viewの状態保持
+// ViewModel
 //　回転やアプリ切り替えなどでも破棄されない｡
-//　LiveDataを保持する｡
-//　Modelのデータから､ViewにUIを描画する(Binding)ための情報を渡す｡
 // ActivityやFragmentはObserveして変更があればUI更新
 //　View  / Context の参照を保持するべきでない｡
-//　ViewへのActionを送信｡　Commands
-//　アンチパターン　ViewがViewModelのメンバを直接操作
-//　Model-> ViewModel　ModelからUIの描画に必要な情報に変換保持
+//　ViewへのActionを受け取る｡　Commands
+//　アンチパターン　ViewがModelのメンバを直接操作
+//　Model-> ViewModel　ModelからUIの描画(Binding)に必要な情報に変換し保持する｡
 //　ViewからのActionをModelに通知｡

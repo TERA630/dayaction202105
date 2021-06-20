@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
-import jp.terameteo.dayaction202105.model.TodayItemEntity
+import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.valueOrZero
 
 class MainListAdaptor(
@@ -17,7 +17,7 @@ class MainListAdaptor(
     private val viewModel: MainViewModel,
     private val page:Int
 ) :
-    androidx.recyclerview.widget.ListAdapter<TodayItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
+    androidx.recyclerview.widget.ListAdapter<ItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
     override fun getItemCount(): Int = viewModel.currentItems.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderOfCell {
@@ -56,21 +56,20 @@ class MainListAdaptor(
             }
             notifyItemChanged(position)
         }
-
     }
 }
 
-private object DiffCallback : DiffUtil.ItemCallback<TodayItemEntity>() {
+private object DiffCallback : DiffUtil.ItemCallback<ItemEntity>() {
     override fun areItemsTheSame(
-        oldStoredItem: TodayItemEntity,
-        newStoredItem: TodayItemEntity
+        oldStoredItem: ItemEntity,
+        newStoredItem: ItemEntity
     ): Boolean {
         return oldStoredItem.id == newStoredItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: TodayItemEntity,
-        newItem: TodayItemEntity
+        oldItem: ItemEntity,
+        newItem: ItemEntity
     ): Boolean {
         return oldItem == newItem
     }
