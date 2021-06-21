@@ -53,13 +53,12 @@ class MainViewModel : ViewModel() {
         val list = List(liveList.value?.size ?:0 ){
             index -> liveList.safetyGet(index)
         }
-        for(i in list.indices) {
-            if (list[i].title == "making") continue
-            viewModelScope.launch {
+        viewModelScope.launch {
+           for(i in list.indices) {
+                if (list[i].title == "making..") continue
                 myModel.insertItem(list[i])
             }
         }
-
     }
     fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
         return dateStr.toRegex().containsMatchIn(item.finishedHistory)
