@@ -10,6 +10,7 @@ import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 import jp.terameteo.dayaction202105.model.ItemEntity
+import jp.terameteo.dayaction202105.safetyGet
 import jp.terameteo.dayaction202105.valueOrZero
 
 class MainListAdaptor(
@@ -32,7 +33,9 @@ class MainListAdaptor(
 
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
-        val item = viewModel.currentItems[position]
+        val item = viewModel.liveList.safetyGet(position)
+       // val item = viewModel.currentItems[position]
+
         val thisCellView = holder.binding.cellText
         thisCellView.text = item.title
         val currentStyle = if (viewModel.isItemDone(item,viewModel.dateEnList[page])) {
