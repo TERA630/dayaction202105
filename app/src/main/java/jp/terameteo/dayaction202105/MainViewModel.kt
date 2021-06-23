@@ -10,6 +10,7 @@ import jp.terameteo.dayaction202105.model.MyModel
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
+    private val myModel: MyModel by lazy { MyModel() }
     val currentItems = mutableListOf<ItemEntity>()
     val liveList = MutableLiveData<List<ItemEntity>>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
@@ -21,7 +22,6 @@ class MainViewModel : ViewModel() {
 
     fun initialize(_context:Context) {
         // TODO 後でROOMからデータを取れる様にする
-        myModel = MyModel()
         myModel.initializeDB(_context)
         for (i in 0..9) {
             dateEnList[i] = myModel.getDayStringEn(9 - i)
@@ -54,14 +54,29 @@ class MainViewModel : ViewModel() {
             index -> liveList.safetyGet(index)
         }
         viewModelScope.launch {
-           for(i in list.indices) {
-                if (list[i].title == "making..") continue
+            for(i in list.indices) {
+            if (list[i].title == "making..") continue
+
                 myModel.insertItem(list[i])
             }
         }
     }
     fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
         return dateStr.toRegex().containsMatchIn(item.finishedHistory)
+    }
+    fun flipItemHistory(item:ItemEntity,page:Int){
+        val currentValue =  currentReward.valueOrZero()
+        if ( isItemDone(item,dateEnList[page])) {
+            // アイテムがチェック済み チェックをはずす
+            removeDateFrom(item,dateEnList[page])
+            val newValue = currentValue - item.reward
+            currentReward.postValue(newValue)
+        } else {
+            appendDateTo(item,dateEnList[page])
+            val newValue = currentValue + item.reward
+            currentReward.postValue(newValue)
+        }
+
     }
 }
 
@@ -71,16 +86,16 @@ class MainViewModel : ViewModel() {
 fun MutableLiveData<List<ItemEntity>>.safetyGet(position:Int): ItemEntity {
     val list = this.value
     return if (list.isNullOrEmpty()) {
-        ItemEntity(title = "making..")
+        ItemEntity()
     } else {
         list[position]
     }
 }
 // ViewModel
-//　回転やアプリ切り替えなどでも破棄されない｡
-// ActivityやFragmentはObserveして変更があればUI更新
-//　View  / Context の参照を保持するべきでない｡
-//　ViewへのActionを受け取る｡　Commands
+// Activity再生成や回転で破棄されないLifecycleを持つ｡ (ViewModelLifeCycle)
+//　各Activity固有｡ 同じActivityのFragmentでは共有される｡
+//　Model-> ViewModel　ModelからUIの描画(Binding)に必要な情報に変換し保持する｡ 現在はLivedataで持つべき｡
+//　ActivityやFragmentはLiveDataをObserveして変更があればUI反映 or Databinding使用｡ VMはViewへの参照は持つべきでない｡
+//　Context の参照を保持するべきでない｡
+//　ViewへのActionを受け取り､Modelに通知する｡　Commands
 //　アンチパターン　ViewがModelのメンバを直接操作
-//　Model-> ViewModel　ModelからUIの描画(Binding)に必要な情報に変換し保持する｡
-//　ViewからのActionをModelに通知｡

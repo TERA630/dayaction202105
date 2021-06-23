@@ -10,7 +10,7 @@ import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 import jp.terameteo.dayaction202105.model.ItemEntity
-import jp.terameteo.dayaction202105.valueOrZero
+import jp.terameteo.dayaction202105.safetyGet
 
 class MainListAdaptor(
     private val viewLifecycleOwner: LifecycleOwner,
@@ -32,7 +32,9 @@ class MainListAdaptor(
 
     override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
-        val item = viewModel.currentItems[position]
+        val item = viewModel.liveList.safetyGet(position)
+       // val item = viewModel.currentItems[position]
+
         val thisCellView = holder.binding.cellText
         thisCellView.text = item.title
         val currentStyle = if (viewModel.isItemDone(item,viewModel.dateEnList[page])) {
@@ -41,19 +43,8 @@ class MainListAdaptor(
             R.drawable.square_silver_gradient
         }
         thisCellView.background = ResourcesCompat.getDrawable(thisCellView.resources, currentStyle, thisCellView.context.theme)
-
         thisCellView.setOnClickListener {
-            val currentValue =  viewModel.currentReward.valueOrZero()
-            if ( viewModel.isItemDone(item,viewModel.dateEnList[page])) {
-                // アイテムがチェック済み チェックをはずす
-                viewModel.removeDateFrom(item,viewModel.dateEnList[page])
-                val newValue = currentValue - item.reward
-                viewModel.currentReward.postValue(newValue)
-            } else {
-                viewModel.appendDateTo(item,viewModel.dateEnList[page])
-                val newValue = currentValue + item.reward
-                viewModel.currentReward.postValue(newValue)
-            }
+            viewModel.flipItemHistory(item,page)
             notifyItemChanged(position)
         }
     }
@@ -61,17 +52,17 @@ class MainListAdaptor(
 
 private object DiffCallback : DiffUtil.ItemCallback<ItemEntity>() {
     override fun areItemsTheSame(
-        oldStoredItem: ItemEntity,
-        newStoredItem: ItemEntity
+        old: ItemEntity,
+        new: ItemEntity
     ): Boolean {
-        return oldStoredItem.id == newStoredItem.id
+        return old.id == new.id
     }
 
     override fun areContentsTheSame(
-        oldItem: ItemEntity,
-        newItem: ItemEntity
+        old: ItemEntity,
+        new: ItemEntity
     ): Boolean {
-        return oldItem == newItem
+        return old == new
     }
 
 }
