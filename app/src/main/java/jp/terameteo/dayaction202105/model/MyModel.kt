@@ -45,8 +45,9 @@ class MyModel {
     }
     suspend fun makeItemList(_context: Context):List<ItemEntity>{
         val roomList = dao.getAll()
-        return if(roomList.isEmpty()){ makeItemListFromResource(_context)}
-        else { roomList}
+        val list = roomList.value ?: emptyList()
+        return if(list.isEmpty()){ makeItemListFromResource(_context)}
+        else { list }
     }
     suspend fun insertItem(itemEntity: ItemEntity){
         dao.insert(itemEntity)

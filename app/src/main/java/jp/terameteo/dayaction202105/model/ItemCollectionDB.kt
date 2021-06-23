@@ -1,5 +1,6 @@
 package jp.terameteo.dayaction202105.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -7,16 +8,16 @@ interface ItemCollectionDAO {
     /** 全データ取得 */
 
     @Query("SELECT * FROM collection_item")
-    suspend fun getAll(): List<ItemEntity>
+    fun getAll(): LiveData<List<ItemEntity>>
     /** データ更新 */
     @Update
-    suspend fun update(item: ItemEntity)
+    fun update(item: ItemEntity)
     /** データ追加 */
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(item: ItemEntity)
+    @Insert (onConflict = OnConflictStrategy.REPLACE) // 同じアイテムを追加すると上書き
+    fun insert(item: ItemEntity)
     /** データ削除 */
     @Delete
-    suspend fun delete(item: ItemEntity)
+    fun delete(item: ItemEntity)
 
 }
 @Database(entities = [ItemEntity::class], version = 1) // 使うentityのクラスを渡す｡
@@ -27,9 +28,9 @@ abstract class ItemCollectionDB : RoomDatabase() {
 @Entity (tableName = "collection_item")
 data class ItemEntity(
     @PrimaryKey @ColumnInfo(name = "id", index = true) var id:Int = 0,
-    var title: String = "unnamed",
-    var reward: Int = 30,
-    var category: String = "",
-    var shouldDoToday: Boolean = true,
-    var finishedHistory: String = ""
+    @ColumnInfo(name = "title") var title: String = "unnamed",
+    @ColumnInfo(name = "reward") var reward: Int = 30,
+    @ColumnInfo(name = "category") var category: String = "",
+    @ColumnInfo(name = "should_do_today") var shouldDoToday: Boolean = true,
+    @ColumnInfo(name = "finished_history")  var finishedHistory: String = ""
 )

@@ -10,6 +10,7 @@ import jp.terameteo.dayaction202105.model.MyModel
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
+    private val myModel: MyModel by lazy { MyModel() }
     val currentItems = mutableListOf<ItemEntity>()
     val liveList = MutableLiveData<List<ItemEntity>>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
@@ -17,7 +18,7 @@ class MainViewModel : ViewModel() {
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = emptyList<String>().toMutableList()
-    private val myModel: MyModel by lazy { MyModel() }
+
 
     fun initialize(_context:Context) {
         // TODO 後でROOMからデータを取れる様にする
@@ -62,6 +63,20 @@ class MainViewModel : ViewModel() {
     }
     fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
         return dateStr.toRegex().containsMatchIn(item.finishedHistory)
+    }
+    fun flipItemHistory(item:ItemEntity,page:Int){
+        val currentValue =  currentReward.valueOrZero()
+        if ( isItemDone(item,dateEnList[page])) {
+            // アイテムがチェック済み チェックをはずす
+            removeDateFrom(item,dateEnList[page])
+            val newValue = currentValue - item.reward
+            currentReward.postValue(newValue)
+        } else {
+            appendDateTo(item,dateEnList[page])
+            val newValue = currentValue + item.reward
+            currentReward.postValue(newValue)
+        }
+
     }
 }
 
