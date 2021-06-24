@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
@@ -13,12 +14,9 @@ import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.safetyGet
 
 class MainListAdaptor(
-    private val viewLifecycleOwner: LifecycleOwner,
     private val viewModel: MainViewModel,
     private val page:Int
-) :
-    androidx.recyclerview.widget.ListAdapter<ItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
-    override fun getItemCount(): Int = viewModel.currentItems.size
+) : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderOfCell {
         // リストの表示要求があったとき､viewTypeに応じて必要なViewHolderを確保する｡
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -29,12 +27,11 @@ class MainListAdaptor(
     // Viewへの参照を保持｡以前は個々の子要素の参照を保存していたが､
     // ViewBindingが使用可能となったので､Bindingのみ保持するようになった｡
 
-    override fun onBindViewHolder(holder: ViewHolderOfCell, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
-        val item = viewModel.liveList.safetyGet(position)
-       // val item = viewModel.currentItems[position]
-
-        val thisCellView = holder.binding.cellText
+        val item = getItem(position)
+        val holderOfCell = holder as ViewHolderOfCell
+        val thisCellView = holderOfCell.binding.cellText
         thisCellView.text = item.title
         val currentStyle = if (viewModel.isItemDone(item,viewModel.dateEnList[page])) {
             R.drawable.square_gold_gradient

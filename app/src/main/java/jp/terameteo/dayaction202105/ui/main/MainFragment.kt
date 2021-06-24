@@ -27,12 +27,11 @@ class MainFragment : Fragment() {
         }
         val page = this.arguments?.getInt(ARG_POSITION) ?:0
         binding.dataShowing.text = viewModel.dateJpList[page]
-        binding.firstPageList.apply {
-            layoutManager = flexBoxLayoutManager
-            adapter = MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = viewModel,page)
-        }
+        binding.firstPageList.layoutManager = flexBoxLayoutManager
+        val adapter = MainListAdaptor(viewModel = viewModel,page)
         viewModel.liveList.observe(viewLifecycleOwner){
-          val currentAdapter  = binding.firstPageList.adapter
+            adapter.submitList(it)
+            binding.firstPageList.adapter = adapter
         }
         return binding.root
     }
