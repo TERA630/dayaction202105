@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
+import jp.terameteo.dayaction202105.ui.main.DetailFragment
 import jp.terameteo.dayaction202105.ui.main.MainFragmentStateAdapter
 
 // TODO ROOM 実装
@@ -30,6 +31,14 @@ class MainActivity : AppCompatActivity() {
             setPageTransformer(ZoomOutPageTransformer())
         }
         val fab: FloatingActionButton = binding.fab
+        fab.setOnClickListener{
+             val newItemPos = viewModel.liveList.value?.lastIndex ?: 1
+             val newFragment  = DetailFragment.newInstance(newItemPos)
+             val transaction = supportFragmentManager.beginTransaction()
+
+        }
+
+
         viewModel.currentReward.observe(this){
             rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
         }
