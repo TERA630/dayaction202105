@@ -16,7 +16,7 @@ const val ERROR_CATEGORY = "error category"
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
-    private lateinit var  db: ItemCollectionDB
+    private lateinit var db: ItemCollectionDB
     private lateinit var dao: ItemCollectionDAO
 
     fun initializeDB( _context: Context) {
@@ -43,15 +43,13 @@ class MyModel {
             parseToItem(index, itemsFromResource[index])
         }
     }
-    suspend fun makeItemList(_context: Context):List<ItemEntity>{
+    fun makeItemList(_context: Context):List<ItemEntity>{
         val roomList = dao.getAll()
         val list = roomList.value ?: emptyList()
         return if(list.isEmpty()){ makeItemListFromResource(_context)}
         else { list }
-        return if(roomList.isEmpty()){ makeItemListFromResource(_context)}
-        else { roomList }
     }
-    suspend fun insertItem(itemEntity: ItemEntity){
+    fun insertItem(itemEntity: ItemEntity){
         dao.insert(itemEntity)
     }
 

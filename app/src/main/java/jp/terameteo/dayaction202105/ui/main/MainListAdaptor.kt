@@ -19,7 +19,6 @@ class MainListAdaptor(
 ) :
     androidx.recyclerview.widget.ListAdapter<ItemEntity, MainListAdaptor.ViewHolderOfCell>(DiffCallback) {
     override fun getItemCount(): Int = viewModel.currentItems.size
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderOfCell {
         // リストの表示要求があったとき､viewTypeに応じて必要なViewHolderを確保する｡
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -48,6 +47,7 @@ class MainListAdaptor(
             notifyItemChanged(position)
         }
     }
+
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<ItemEntity>() {
