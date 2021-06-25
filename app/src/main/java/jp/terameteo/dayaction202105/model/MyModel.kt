@@ -1,4 +1,4 @@
-package jp.terameteo.dayaction202105.model
+ package jp.terameteo.dayaction202105.model
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat
