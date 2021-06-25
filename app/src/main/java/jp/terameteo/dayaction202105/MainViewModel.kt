@@ -19,7 +19,6 @@ class MainViewModel : ViewModel() {
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = emptyList<String>().toMutableList()
 
-
     fun initialize(_context:Context) {
         // TODO 後でROOMからデータを取れる様にする
         myModel.initializeDB(_context)
@@ -56,7 +55,6 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             for(i in list.indices) {
             if (list[i].title == "making..") continue
-
                 myModel.insertItem(list[i])
             }
         }
@@ -92,10 +90,11 @@ fun MutableLiveData<List<ItemEntity>>.safetyGet(position:Int): ItemEntity {
     }
 }
 // ViewModel
-// Activity再生成や回転で破棄されないLifecycleを持つ｡ (ViewModelLifeCycle)
+// Activity再生成や回転で破棄されないClass(ViewModelLifeCycle)
 //　各Activity固有｡ 同じActivityのFragmentでは共有される｡
-//　Model-> ViewModel　ModelからUIの描画(Binding)に必要な情報に変換し保持する｡ 現在はLivedataで持つべき｡
-//　ActivityやFragmentはLiveDataをObserveして変更があればUI反映 or Databinding使用｡ VMはViewへの参照は持つべきでない｡
+//　値の保持をLivedataで行うのが主流｡
+//　Model-> ViewModel　ModelからUIの描画(Binding)に必要な情報に変換し保持する｡
+//　ActivityやFragmentはLiveDataをObserveして変更があればUI反映 or DataBinding使用｡ VMはViewへの参照は持つべきでない｡
 //　Context の参照を保持するべきでない｡
-//　ViewへのActionを受け取り､Modelに通知する｡　Commands
-//　アンチパターン　ViewがModelのメンバを直接操作
+//　ユーザーのViewへのActionを受け取り､Modelに通知する｡　Commands
+//　ViewがModelのメンバを直接操作するのは推奨されない｡

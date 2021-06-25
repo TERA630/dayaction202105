@@ -5,9 +5,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
+import jp.terameteo.dayaction202105.ui.main.DetailFragment
 import jp.terameteo.dayaction202105.ui.main.MainFragmentStateAdapter
 
-// TODO クリック時のイベント
 // TODO ROOM 実装
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +31,14 @@ class MainActivity : AppCompatActivity() {
             setPageTransformer(ZoomOutPageTransformer())
         }
         val fab: FloatingActionButton = binding.fab
+        fab.setOnClickListener{
+             val newItemPos = viewModel.liveList.value?.lastIndex ?: 1
+             val newFragment  = DetailFragment.newInstance(newItemPos)
+             val transaction = supportFragmentManager.beginTransaction()
+
+        }
+
+
         viewModel.currentReward.observe(this){
             rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
         }
@@ -43,4 +51,4 @@ class MainActivity : AppCompatActivity() {
 //　Activityのみでアプリケーションを完結させようとすると､
 //　端末の回転時やアプリケーションの切り替え時に表示状態(State)の保持に苦労する｡
 //　2017年頃までには回転させない､Activity再生成させない､onSavedInstanceStateを使うなど
-//　あったが､状態の保持はViewModelに委譲するのが現在の主流｡
+//　あったが､状態の保持はViewModelクラスで行うようにするのが主流｡

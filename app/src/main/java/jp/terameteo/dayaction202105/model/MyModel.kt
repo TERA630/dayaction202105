@@ -16,7 +16,7 @@ const val ERROR_CATEGORY = "error category"
 const val REWARD_HISTORY = "rewardHistory"
 
 class MyModel {
-    private lateinit var  db: ItemCollectionDB
+    private lateinit var db: ItemCollectionDB
     private lateinit var dao: ItemCollectionDAO
 
     fun initializeDB( _context: Context) {
@@ -43,13 +43,13 @@ class MyModel {
             parseToItem(index, itemsFromResource[index])
         }
     }
-    suspend fun makeItemList(_context: Context):List<ItemEntity>{
+    fun makeItemList(_context: Context):List<ItemEntity>{
         val roomList = dao.getAll()
         val list = roomList.value ?: emptyList()
         return if(list.isEmpty()){ makeItemListFromResource(_context)}
         else { list }
     }
-    suspend fun insertItem(itemEntity: ItemEntity){
+    fun insertItem(itemEntity: ItemEntity){
         dao.insert(itemEntity)
     }
 
@@ -57,13 +57,14 @@ class MyModel {
         // 入力： string = "title ; reward ; category ; finishedHistory"
         // 出力： storedItem (title,reward,category,finishedHistory )を返す｡
         val elementList = _string.split(";").toMutableList()
-
         // 文字列が規則に従っているか
+        if (elementList.lastIndex<2) {return ItemEntity(title = ERROR_TITLE)}
+
         val title = if(elementList[0].isBlank()) ERROR_TITLE else elementList[0].trim()
         val reward = if(elementList[1].isDigitsOnly())  elementList[1].toInt() else 0
         val category = if(elementList[2].isBlank()) ERROR_CATEGORY else elementList[2].trim()
 
-        return if (elementList.size < 4) {
+        return if (elementList.lastIndex ==2) {
             // historyが無い場合
             ItemEntity(id, title,reward,category,shouldDoToday = true,finishedHistory = "")
         } else {

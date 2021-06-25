@@ -13,7 +13,7 @@ import jp.terameteo.dayaction202105.databinding.FragmentMainBinding
 const val ARG_POSITION = "positionOfThisFragment"
 
 class MainFragment : Fragment() {
-    private val pageViewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding:FragmentMainBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -26,11 +26,12 @@ class MainFragment : Fragment() {
             alignItems = AlignItems.FLEX_START
         }
         val page = this.arguments?.getInt(ARG_POSITION) ?:0
-        binding.dataShowing.text = pageViewModel.dateJpList[page]
-        binding.firstPageList.apply {
-            layoutManager = flexBoxLayoutManager
-            adapter =
-                MainListAdaptor(viewLifecycleOwner = viewLifecycleOwner, viewModel = pageViewModel,page)
+        binding.dataShowing.text = viewModel.dateJpList[page]
+        binding.firstPageList.layoutManager = flexBoxLayoutManager
+        val adapter = MainListAdaptor(viewModel = viewModel,page)
+        viewModel.liveList.observe(viewLifecycleOwner){
+            adapter.submitList(it)
+            binding.firstPageList.adapter = adapter
         }
         return binding.root
     }
