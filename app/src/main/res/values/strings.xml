@@ -13,12 +13,14 @@
     <string name="testReward">1200円</string>
     <string name="testItem">気づきをメモする</string>
     <string name="testDate">2021年6月10日</string>
+    <string name="testCategory">運動</string>
+
 
     <string-array
             name="default_item_list">
         <item>本日の記録;30;Daily;2021/6/10</item>
         <item>明日の一日の予定;30;Daily</item>
-        <item>腕立て20;30;Daily;2021/6/10</item>
+        <item>腕立て20;30;Daily;2021/6/10,2021/6/22,2021/6/23,2021/6/24</item>
         <item>腹筋20;30;運動;2021/6/9,2021/6/13</item>
         <item>腕立て2セット目;30;運動;2021/6/10,2021/6/11,2021/6/12,2021/6/22,2021/6/23</item>
         <item>勉強1ポモドーロ;60;運動;2021/6/8</item>
@@ -34,10 +36,8 @@
         <item>家計;60;Monthly</item>
         <item>6/20;10;Daily;2021/6/20</item>
         <item>6/19;10;Daily;2021/6/19</item>
-        <item>6/18;10;Daily;2021/6/18</item>
-        <item>6/17;10;Daily;2021/6/17</item>
-        <item>6/16;10;Daily;2021/6/16</item>
-        <item>6/15;10;Daily;2021/6/15</item>
-        <item>6/14;10;Daily;2021/6/14</item>
+        <item>2週間後まで外来予習;30;仕事;2021/6/24</item>
+        <item>診断書クリア;30;仕事;2021/6/24</item>
+        <item>病理所見クリア;30;仕事;2021/6/24</item>
         </string-array>
 </resources>

@@ -20,7 +20,7 @@ interface ItemCollectionDAO {
     fun delete(item: ItemEntity)
 
 }
-@Database(entities = [ItemEntity::class], version = 1) // 使うentityのクラスを渡す｡
+@Database(entities = [ItemEntity::class], version = 2) // 使うentityのクラスを渡す｡
 abstract class ItemCollectionDB : RoomDatabase() {
     abstract fun itemCollectionDAO(): ItemCollectionDAO // 上記Interfaceの抽象メソッドを含む
 }
