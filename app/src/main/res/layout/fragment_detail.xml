@@ -4,31 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="16"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTitle"
-            android:layout_width="match_parent"
+    <EditText
+            android:id="@+id/editReward"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="hint" />
 
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextNumberDecimal2"
-                android:layout_width="400dp"
-                android:layout_height="152dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="numberDecimal" />
+            android:ems="8"
+            android:inputType="numberDecimal" />
 
-        <Spinner
+    <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             />
 
+    <Button
+        android:id="@+id/detailOkbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/detailCancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+
 </LinearLayout>
