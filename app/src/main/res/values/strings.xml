@@ -14,6 +14,8 @@
     <string name="testItem">気づきをメモする</string>
     <string name="testDate">2021年6月10日</string>
     <string name="testCategory">運動</string>
+    <string name="append">追加</string>
+    <string name="calcel">キャンセル</string>
 
 
     <string-array

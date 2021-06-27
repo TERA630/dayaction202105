@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.activityViewModels
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
@@ -19,20 +20,26 @@ class DetailFragment :Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
+        binding =  FragmentDetailBinding.inflate(inflater, container, false)
         val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.simple_spinner_item)
         for(i in viewModel.currentCategory.indices){
             arrayAdapter.add(viewModel.currentCategory[i])
         }
         binding.spinner.adapter = arrayAdapter
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        binding.detailCancelButton.setOnClickListener {
+            val entry = parentFragmentManager.getBackStackEntryAt(0)
+            parentFragmentManager.popBackStack(entry.id, POP_BACK_STACK_INCLUSIVE)
+        }
+
+        return binding.root
     }
     companion object {
         @JvmStatic
-        fun newInstance(position: Int): MainFragment {
-            val newFragment = MainFragment()
+        fun newInstance(position: Int): DetailFragment {
+            val newFragment = DetailFragment()
             val args = Bundle()
             args.putInt(ARG_ITEM_ID,position)
             newFragment.arguments = args

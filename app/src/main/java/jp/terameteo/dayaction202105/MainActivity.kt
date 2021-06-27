@@ -10,42 +10,64 @@ import jp.terameteo.dayaction202105.ui.main.MainFragmentStateAdapter
 
 // TODO ROOM 実装
 
+const val DETAIL_WINDOW = "detailWindow"
+
 class MainActivity : AppCompatActivity() {
     // androidx.fragment.app.Fragment Activity -> androidx.appcompat.app.AppCompatActivity
     private lateinit var binding: ActivityMainBinding
-    private val viewModel:MainViewModel by viewModels() // activity-ktx
+    private val viewModel: MainViewModel by viewModels() // activity-ktx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize(this)
-        
+
         // Bind Activity View
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val rewardLabel = binding.achievement
-        rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
+        rewardLabel.text =
+            resources.getString(R.string.reward_placeHolder, viewModel.currentReward.value)
 
         binding.pager.apply {
             adapter = MainFragmentStateAdapter(this@MainActivity)
             currentItem = 10 // position 0-9
             setPageTransformer(ZoomOutPageTransformer())
         }
+        // アイテム追加の準備
+
         val fab: FloatingActionButton = binding.fab
-        fab.setOnClickListener{
-             val newItemPos = viewModel.liveList.value?.lastIndex ?: 1
-             val newFragment  = DetailFragment.newInstance(newItemPos)
-             val transaction = supportFragmentManager.beginTransaction()
-
+        fab.setOnClickListener {
+            wakeDetailFragment()
         }
-
-
-        viewModel.currentReward.observe(this){
-            rewardLabel.text = resources.getString(R.string.reward_placeHolder,viewModel.currentReward.value)
+        viewModel.currentReward.observe(this) {
+            rewardLabel.text =
+                resources.getString(R.string.reward_placeHolder, viewModel.currentReward.value)
         }
     }
     override fun onPause() {
-        super.onPause()
         viewModel.stateSave(this)
+        super.onPause()
+    }
+    private fun wakeDetailFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        val detailFragmentOrNull =
+            supportFragmentManager.findFragmentByTag(DETAIL_WINDOW) as DetailFragment?
+        if (detailFragmentOrNull == null) {
+            // detailFragmentがまだインスタンス化されてなければ
+            val newItemId = viewModel.liveList.value?.lastIndex ?: 1
+            val fragment = DetailFragment.newInstance(newItemId)
+
+            transaction.add(R.id.detail_container, fragment, DETAIL_WINDOW)
+            transaction.commit()
+        } else {
+            // detailFragmentがインスタンス化されていたら
+            if (detailFragmentOrNull.isVisible) {
+                transaction.hide(detailFragmentOrNull)
+            } else {
+                transaction.show(detailFragmentOrNull)
+            }
+            transaction.commit()
+        }
     }
 }
 //　Activityのみでアプリケーションを完結させようとすると､
