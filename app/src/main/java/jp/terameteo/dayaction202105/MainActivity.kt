@@ -32,9 +32,10 @@ class MainActivity : AppCompatActivity() {
         }
         val fab: FloatingActionButton = binding.fab
         fab.setOnClickListener{
-             val newItemPos = viewModel.liveList.value?.lastIndex ?: 1
-             val newFragment  = DetailFragment.newInstance(newItemPos)
-             val transaction = supportFragmentManager.beginTransaction()
+            val newItemPos = viewModel.liveList.value?.lastIndex ?: 1
+            val newFragment  = DetailFragment.newInstance(newItemPos)
+            val transaction = supportFragmentManager.beginTransaction()
+
 
         }
 

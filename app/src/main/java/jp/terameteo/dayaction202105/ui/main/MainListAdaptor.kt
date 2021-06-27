@@ -3,15 +3,13 @@ package jp.terameteo.dayaction202105.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 import jp.terameteo.dayaction202105.model.ItemEntity
-import jp.terameteo.dayaction202105.safetyGet
 
 class MainListAdaptor(
     private val viewModel: MainViewModel,
@@ -44,7 +42,6 @@ class MainListAdaptor(
             notifyItemChanged(position)
         }
     }
-
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<ItemEntity>() {
