@@ -2,27 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/frame_silver"
+    android:padding="@dimen/padding_detailFragment">
 
     <EditText
         android:id="@+id/editTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="16"/>
-
+        android:padding="@dimen/padding_detailFragment"
+        android:autofillHints="@string/titleCaption"
+        android:ems="16"
+        android:inputType="text"
+        android:hint="@string/titleCaption"/>
     <EditText
             android:id="@+id/editReward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:padding="@dimen/padding_detailFragment"
+            android:autofillHints="@string/rewardCaption"
+            android:hint="@string/rewardCaption"
             android:ems="8"
             android:inputType="numberDecimal" />
 
     <Spinner
             android:id="@+id/spinner"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:padding="@dimen/padding_detailFragment"
             />
 
     <Button
@@ -32,11 +39,14 @@
         android:text="@string/append"
         android:contentDescription="@string/press_to_append"/>
 
+        android:text="@string/append"
+        android:padding="@dimen/padding_detailFragment"/>
     <Button
         android:id="@+id/detailCancelButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/cancel" />
+        android:text="@string/cancel"
+        android:padding="@dimen/padding_detailFragment"/>
 
 
 </LinearLayout>

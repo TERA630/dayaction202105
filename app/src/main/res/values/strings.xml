@@ -17,6 +17,8 @@
     <string name="append">追加</string>
 
 
+    <string name="titleCaption">行うことのタイトル</string>
+    <string name="rewardCaption">達成時の報酬</string>
     <string-array
             name="default_item_list">
         <item>本日の記録;30;Daily;2021/6/10</item>

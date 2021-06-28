@@ -19,8 +19,7 @@ class DetailFragment :Fragment(){
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
         val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.simple_spinner_item)
@@ -28,16 +27,13 @@ class DetailFragment :Fragment(){
             arrayAdapter.add(viewModel.currentCategory[i])
         }
         binding.spinner.adapter = arrayAdapter
-
         binding.detailCancelButton.setOnClickListener {
-            val fm = parentFragmentManager
-            val fragment = parentFragmentManager.findFragmentByTag(DETAIL_WINDOW)
             val transaction = parentFragmentManager.beginTransaction()
-            fragment?.let{
-                transaction.hide(fragment)
+            val fragment = parentFragmentManager.findFragmentByTag(DETAIL_WINDOW)?.let{
+                transaction.hide(it)
+                transaction.commit()
             }
         }
-
         return binding.root
     }
     companion object {
