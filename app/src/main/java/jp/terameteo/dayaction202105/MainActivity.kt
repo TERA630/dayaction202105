@@ -25,8 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val rewardLabel = binding.achievement
-        rewardLabel.text =
-            resources.getString(R.string.reward_placeHolder, viewModel.currentReward.value)
+        rewardLabel.text = resources.getString(R.string.reward_placeHolder, viewModel.currentReward.value)
 
         binding.pager.apply {
             adapter = MainFragmentStateAdapter(this@MainActivity)
@@ -38,9 +37,8 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             wakeDetailFragment()
         }
-        viewModel.currentReward.observe(this) {
-            rewardLabel.text =
-                resources.getString(R.string.reward_placeHolder, viewModel.currentReward.value)
+        viewModel.currentRewardStr.observe(this) {
+            rewardLabel.text = it
         }
     }
     override fun onPause() {

@@ -20,7 +20,9 @@ class MyModel {
     private lateinit var dao: ItemCollectionDAO
 
     fun initializeDB( _context: Context) {
-         db = Room.databaseBuilder(_context, ItemCollectionDB::class.java, "collection_item").build()
+         db = Room.databaseBuilder(_context, ItemCollectionDB::class.java, "collection_item")
+             .fallbackToDestructiveMigration()
+             .build()
          dao = db.itemCollectionDAO()
         return
     } // MakeItemListの前に実行

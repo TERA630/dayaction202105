@@ -11,6 +11,7 @@ import jp.terameteo.dayaction202105.DETAIL_WINDOW
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.FragmentDetailBinding
+import jp.terameteo.dayaction202105.model.ERROR_CATEGORY
 
 const val ARG_ITEM_ID= "argumentItemId"
 class DetailFragment :Fragment(){
@@ -22,27 +23,40 @@ class DetailFragment :Fragment(){
         savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
-        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.simple_spinner_item)
-        for(i in viewModel.currentCategory.indices){
-            arrayAdapter.add(viewModel.currentCategory[i])
+        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
+
+        val categoryList = viewModel.currentCategory.value ?: listOf(ERROR_CATEGORY)
+        for(i in categoryList.indices){
+            arrayAdapter.add(categoryList[i])
         }
+        arrayAdapter.add("test1")
+        arrayAdapter.add("test2")
+
         binding.spinner.adapter = arrayAdapter
+
         binding.detailCancelButton.setOnClickListener {
-            val transaction = parentFragmentManager.beginTransaction()
-            val fragment = parentFragmentManager.findFragmentByTag(DETAIL_WINDOW)?.let{
-                transaction.hide(it)
-                transaction.commit()
-            }
+            navigateToMain()
+        }
+        binding.detailOkButton.setOnClickListener{
+
+            navigateToMain()
         }
         return binding.root
+    }
+    private fun navigateToMain(){
+        val transaction = parentFragmentManager.beginTransaction()
+        parentFragmentManager.findFragmentByTag(DETAIL_WINDOW)?.let{
+            transaction.hide(it)
+            transaction.commit()
+        }
     }
     companion object {
         @JvmStatic
         fun newInstance(position: Int): DetailFragment {
             val newFragment = DetailFragment()
-            val args = Bundle()
-            args.putInt(ARG_ITEM_ID,position)
-            newFragment.arguments = args
+            newFragment.arguments = Bundle().apply {// プロパティを設定した呼び出し元のインスタンスを返すapplyは自身がthis Alsoはit
+                putInt(ARG_ITEM_ID,position)
+            }
             return newFragment
         }
     }

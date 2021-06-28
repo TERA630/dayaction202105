@@ -11,13 +11,12 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
     private val myModel: MyModel by lazy { MyModel() }
-    val currentItems = mutableListOf<ItemEntity>()
     val liveList = MutableLiveData<List<ItemEntity>>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
     val dateEnList = MutableList(10){"1970/1/1"}
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
-    val currentCategory = emptyList<String>().toMutableList()
+    val currentCategory = MediatorLiveData<List<String>>()
 
     fun initialize(_context:Context) {
         // TODO 後でROOMからデータを取れる様にする
@@ -30,22 +29,17 @@ class MainViewModel : ViewModel() {
         }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward) { value -> currentRewardStr.postValue("$value　円") }
-        currentCategory.addAll(myModel.makeCategoryList(currentItems))
-
-
         viewModelScope.launch {
             val list = myModel.makeItemList(_context )
-            currentItems.clear()
-            currentItems.addAll(list)
-            liveList.postValue(currentItems)
+            liveList.postValue(list)
         }
+        currentCategory.addSource(liveList){ value ->
+            val list = myModel.makeCategoryList(value)
+            currentCategory.postValue(list)
+        }
+
     }
-    fun appendDateTo(item: ItemEntity, dateStr: String){
-        myModel.appendDateToItem(item,dateStr)
-    }
-    fun removeDateFrom(item:ItemEntity, dateStr: String){
-        myModel.deleteDateFromItem(item,dateStr)
-    }
+
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)
@@ -58,9 +52,13 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+    // アイテムの履歴から､その日完了していたかどうかを返す｡  →View側ではそれに応じて表示内容を変える 本当はModelに入れとくものなんだが｡
     fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
         return dateStr.toRegex().containsMatchIn(item.finishedHistory)
     }
+
+    // クリックでその日の完了/未完了を切り替える｡
     fun flipItemHistory(item:ItemEntity,page:Int){
         val currentValue =  currentReward.valueOrZero()
         if ( isItemDone(item,dateEnList[page])) {
@@ -74,6 +72,12 @@ class MainViewModel : ViewModel() {
             currentReward.postValue(newValue)
         }
 
+    }
+    private fun appendDateTo(item: ItemEntity, dateStr: String){
+        myModel.appendDateToItem(item,dateStr)
+    }
+    private fun removeDateFrom(item:ItemEntity, dateStr: String){
+        myModel.deleteDateFromItem(item,dateStr)
     }
 }
 

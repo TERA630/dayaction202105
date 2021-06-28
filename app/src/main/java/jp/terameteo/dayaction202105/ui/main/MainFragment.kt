@@ -15,8 +15,7 @@ const val ARG_POSITION = "positionOfThisFragment"
 class MainFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding:FragmentMainBinding
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         val flexBoxLayoutManager = FlexboxLayoutManager(this.context).apply {
@@ -39,13 +38,12 @@ class MainFragment : Fragment() {
         @JvmStatic
         fun newInstance(position: Int): MainFragment {
             val newFragment = MainFragment()
-            val args = Bundle()
-            args.putInt(ARG_POSITION,position)
-            newFragment.arguments = args
+            newFragment.arguments = Bundle().apply {
+                putInt(ARG_POSITION,position)
+            }
             return newFragment
         }
     }
 }
 
 // FragmentはModelを直接さわらない
-//
