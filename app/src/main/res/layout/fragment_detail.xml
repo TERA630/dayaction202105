@@ -20,22 +20,23 @@
 
     <Spinner
             android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             />
 
     <Button
-        android:id="@+id/detailOkbutton"
+        android:id="@+id/detailOkButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/append"
+        android:contentDescription="@string/press_to_append"/>
 
     <Button
         android:id="@+id/detailCancelButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/cancel" />
 
 
 </LinearLayout>
