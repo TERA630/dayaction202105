@@ -23,22 +23,20 @@ class DetailFragment :Fragment(){
         savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
-        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
 
-        val categoryList = viewModel.currentCategory.value ?: listOf(ERROR_CATEGORY)
-        for(i in categoryList.indices){
-            arrayAdapter.add(categoryList[i])
+        viewModel.currentCategory.observe(viewLifecycleOwner){
+            val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
+            val categoryList = viewModel.currentCategory.value ?: listOf(ERROR_CATEGORY)
+            for(i in categoryList.indices){
+                arrayAdapter.add(categoryList[i])
+            }
+            binding.spinner.adapter = arrayAdapter
         }
-        arrayAdapter.add("test1")
-        arrayAdapter.add("test2")
-
-        binding.spinner.adapter = arrayAdapter
 
         binding.detailCancelButton.setOnClickListener {
             navigateToMain()
         }
         binding.detailOkButton.setOnClickListener{
-
             navigateToMain()
         }
         return binding.root

@@ -63,22 +63,16 @@ class MainViewModel : ViewModel() {
         val currentValue =  currentReward.valueOrZero()
         if ( isItemDone(item,dateEnList[page])) {
             // アイテムがチェック済み チェックをはずす
-            removeDateFrom(item,dateEnList[page])
+            myModel.deleteDateFromItem(item,dateEnList[page])
             val newValue = currentValue - item.reward
             currentReward.postValue(newValue)
         } else {
-            appendDateTo(item,dateEnList[page])
+            myModel.appendDateToItem(item,dateEnList[page])
             val newValue = currentValue + item.reward
             currentReward.postValue(newValue)
         }
+    }
 
-    }
-    private fun appendDateTo(item: ItemEntity, dateStr: String){
-        myModel.appendDateToItem(item,dateStr)
-    }
-    private fun removeDateFrom(item:ItemEntity, dateStr: String){
-        myModel.deleteDateFromItem(item,dateStr)
-    }
 }
 
  fun MutableLiveData<Int>.valueOrZero() : Int{
