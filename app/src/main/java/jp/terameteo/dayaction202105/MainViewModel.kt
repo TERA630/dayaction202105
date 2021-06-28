@@ -19,7 +19,6 @@ class MainViewModel : ViewModel() {
     val currentCategory = MediatorLiveData<List<String>>()
 
     fun initialize(_context:Context) {
-        // TODO 後でROOMからデータを取れる様にする
         myModel.initializeDB(_context)
         for (i in 0..9) {
             dateEnList[i] = myModel.getDayStringEn(9 - i)
