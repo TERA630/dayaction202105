@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
             setPageTransformer(ZoomOutPageTransformer())
         }
         // アイテム追加の準備
-
         val fab: FloatingActionButton = binding.fab
         fab.setOnClickListener {
             wakeDetailFragment()
@@ -53,12 +52,10 @@ class MainActivity : AppCompatActivity() {
         val detailFragmentOrNull =
             supportFragmentManager.findFragmentByTag(DETAIL_WINDOW) as DetailFragment?
         if (detailFragmentOrNull == null) {
-            // detailFragmentがまだインスタンス化されてなければ
+            // detailFragmentがまだインスタンス化されてなければ(初回起動)
             val newItemId = viewModel.liveList.value?.lastIndex ?: 1
             val fragment = DetailFragment.newInstance(newItemId)
-
             transaction.add(R.id.detail_container, fragment, DETAIL_WINDOW)
-            transaction.commit()
         } else {
             // detailFragmentがインスタンス化されていたら
             if (detailFragmentOrNull.isVisible) {
@@ -66,8 +63,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 transaction.show(detailFragmentOrNull)
             }
-            transaction.commit()
         }
+        transaction.commit()
     }
 }
 //　Activityのみでアプリケーションを完結させようとすると､

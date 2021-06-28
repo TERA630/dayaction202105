@@ -54,7 +54,6 @@ class MainViewModel : ViewModel() {
         }
         viewModelScope.launch {
             for(i in list.indices) {
-            if (list[i].title == "making..") continue
                 myModel.insertItem(list[i])
             }
         }

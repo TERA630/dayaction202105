@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.activityViewModels
+import jp.terameteo.dayaction202105.DETAIL_WINDOW
 import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.FragmentDetailBinding
@@ -19,8 +19,7 @@ class DetailFragment :Fragment(){
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
         val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.simple_spinner_item)
@@ -28,12 +27,13 @@ class DetailFragment :Fragment(){
             arrayAdapter.add(viewModel.currentCategory[i])
         }
         binding.spinner.adapter = arrayAdapter
-
         binding.detailCancelButton.setOnClickListener {
-            val entry = parentFragmentManager.getBackStackEntryAt(0)
-            parentFragmentManager.popBackStack(entry.id, POP_BACK_STACK_INCLUSIVE)
+            val transaction = parentFragmentManager.beginTransaction()
+            val fragment = parentFragmentManager.findFragmentByTag(DETAIL_WINDOW)?.let{
+                transaction.hide(it)
+                transaction.commit()
+            }
         }
-
         return binding.root
     }
     companion object {
