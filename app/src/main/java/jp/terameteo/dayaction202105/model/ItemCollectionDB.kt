@@ -34,3 +34,8 @@ data class ItemEntity(
     @ColumnInfo(name = "should_do_today") var shouldDoToday: Boolean = true,
     @ColumnInfo(name = "finished_history")  var finishedHistory: String = ""
 )
+// 拡張関数として静的(Static)メソッドを宣言
+
+fun ItemEntity.isDoneAt(dateStr: String): Boolean { // Str yyyy/mm/ddがFinished Historyに含まれればTRUE､なければFalse
+    return dateStr.toRegex().containsMatchIn(this.finishedHistory)
+}

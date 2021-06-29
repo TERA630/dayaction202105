@@ -37,6 +37,9 @@ class DetailFragment :Fragment(){
             navigateToMain()
         }
         binding.detailOkButton.setOnClickListener{
+            val title = binding.editTitle.text.toString()
+            val reward = binding.editReward.text.toString().toInt()
+            viewModel.appendItem(title,reward,"")
             navigateToMain()
         }
         return binding.root

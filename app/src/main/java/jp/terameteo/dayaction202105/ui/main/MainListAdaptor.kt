@@ -10,6 +10,7 @@ import jp.terameteo.dayaction202105.MainViewModel
 import jp.terameteo.dayaction202105.R
 import jp.terameteo.dayaction202105.databinding.ItemTestBinding
 import jp.terameteo.dayaction202105.model.ItemEntity
+import jp.terameteo.dayaction202105.model.isDoneAt
 
 class MainListAdaptor(
     private val viewModel: MainViewModel,
@@ -29,15 +30,17 @@ class MainListAdaptor(
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
         val item = getItem(position)
         val holderOfCell = holder as ViewHolderOfCell
-        val thisCellView = holderOfCell.binding.cellText
-        thisCellView.text = item.title
-        val currentStyle = if (viewModel.isItemDone(item,viewModel.dateEnList[page])) {
+        val thisView = holderOfCell.binding.cellText
+
+        val backGround = if (item.isDoneAt(viewModel.dateEnList[page])){
             R.drawable.square_gold_gradient
         } else {
             R.drawable.square_silver_gradient
         }
-        thisCellView.background = ResourcesCompat.getDrawable(thisCellView.resources, currentStyle, thisCellView.context.theme)
-        thisCellView.setOnClickListener {
+        thisView.text = item.title
+        thisView.background = ResourcesCompat.getDrawable(
+            thisView.resources, backGround, thisView.context.theme)
+        thisView.setOnClickListener {
             viewModel.flipItemHistory(item,page)
             notifyItemChanged(position)
         }

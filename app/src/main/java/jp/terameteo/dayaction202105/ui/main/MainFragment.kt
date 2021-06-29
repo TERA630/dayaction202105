@@ -28,6 +28,7 @@ class MainFragment : Fragment() {
         binding.dataShowing.text = viewModel.dateJpList[page]
         binding.firstPageList.layoutManager = flexBoxLayoutManager
         val adapter = MainListAdaptor(viewModel = viewModel,page)
+
         viewModel.liveList.observe(viewLifecycleOwner){
             adapter.submitList(it)
             binding.firstPageList.adapter = adapter
@@ -47,3 +48,7 @@ class MainFragment : Fragment() {
 }
 
 // FragmentはModelを直接さわらない
+// また､LivedataのValueはデーターベースからの読み込みが終わるまではNullableであり､
+// Fragment生成時に値を直接読み込まない方がよい  ×  View. Text = Livedata.value
+// LivedataはObserveされていないと更新されないためずっとNullが返ってくる｡ (かなり長いことバグの温床でした)
+// Livedataが変更されてもこのままだと表示が更新されない｡

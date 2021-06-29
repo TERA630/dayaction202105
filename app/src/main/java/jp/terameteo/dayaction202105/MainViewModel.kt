@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.model.MyModel
+import jp.terameteo.dayaction202105.model.isDoneAt
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -38,7 +39,6 @@ class MainViewModel : ViewModel() {
         }
 
     }
-
     fun stateSave(_context: Context) {
         val reward = currentReward.value ?:0
         myModel.saveRewardToPreference(reward,_context)
@@ -51,16 +51,10 @@ class MainViewModel : ViewModel() {
             }
         }
     }
-
-    // アイテムの履歴から､その日完了していたかどうかを返す｡  →View側ではそれに応じて表示内容を変える 本当はModelに入れとくものなんだが｡
-    fun isItemDone(item: ItemEntity, dateStr: String): Boolean { // Str yyyy/mm/dd
-        return dateStr.toRegex().containsMatchIn(item.finishedHistory)
-    }
-
     // クリックでその日の完了/未完了を切り替える｡
     fun flipItemHistory(item:ItemEntity,page:Int){
         val currentValue =  currentReward.valueOrZero()
-        if ( isItemDone(item,dateEnList[page])) {
+        if ( item.isDoneAt(dateEnList[page])) {
             // アイテムがチェック済み チェックをはずす
             myModel.deleteDateFromItem(item,dateEnList[page])
             val newValue = currentValue - item.reward
@@ -71,10 +65,19 @@ class MainViewModel : ViewModel() {
             currentReward.postValue(newValue)
         }
     }
-
+    fun appendItem(newTitle:String,newReward:Int,category:String){
+        if(newTitle.isBlank()) return
+        val newCategory = if(category.isBlank())  "Daily" else category
+        val newItem = ItemEntity(title = newTitle,reward = newReward,category = newCategory)
+        val list = liveList.value?.toMutableList() ?: emptyList<ItemEntity>().toMutableList()
+        list.add(newItem)
+        liveList.postValue(list)
+    }
 }
 
- fun MutableLiveData<Int>.valueOrZero() : Int{
+// LiveDataの拡張関数 Static method
+
+fun MutableLiveData<Int>.valueOrZero() : Int{
       return this.value ?: 0
  }
 fun MutableLiveData<List<ItemEntity>>.safetyGet(position:Int): ItemEntity {
@@ -86,7 +89,7 @@ fun MutableLiveData<List<ItemEntity>>.safetyGet(position:Int): ItemEntity {
     }
 }
 // ViewModel
-// Activity再生成や回転で破棄されないClass(ViewModelLifeCycle)
+// Activity再生成や回転で破棄されない独自のLifecycleで管理されるClass(ViewModelLifeCycle)
 //　各Activity固有｡ 同じActivityのFragmentでは共有される｡
 //　値の保持をLivedataで行うのが主流｡
 //　Model-> ViewModel　ModelからUIの描画(Binding)に必要な情報に変換し保持する｡
