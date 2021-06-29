@@ -19,9 +19,7 @@ const val ARG_ITEM_ID= "argumentItemId"
 class DetailFragment :Fragment(){
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentDetailBinding
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
@@ -34,18 +32,18 @@ class DetailFragment :Fragment(){
             }
             binding.spinner.adapter = arrayAdapter
         }
-
         binding.detailCancelButton.setOnClickListener {
             navigateToMain()
         }
         binding.detailOkButton.setOnClickListener{
             val title = binding.editTitle.text.toString()
             val reward = binding.editReward.text.toString().toInt()
-            viewModel.appendItem(title,reward,"daily")
+            val category = binding.spinner.selectedItem.toString()
+            viewModel.appendItem(title,reward,category)
             navigateToMain()
         }
         binding.spinner.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            if(hasFocus){
+            if(hasFocus){ //　SpinnerのFocus時はソフトキーボードを隠す｡
                 val imm = getSystemService(this.requireContext(),InputMethodManager::class.java) as InputMethodManager
                 imm.hideSoftInputFromWindow(v.windowToken,InputMethodManager.HIDE_NOT_ALWAYS)
             }
