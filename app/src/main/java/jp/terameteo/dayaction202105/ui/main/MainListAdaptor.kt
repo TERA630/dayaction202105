@@ -1,5 +1,6 @@
 package jp.terameteo.dayaction202105.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -30,13 +31,14 @@ class MainListAdaptor(
         // リストのPositionの部位の表示要求があったときに､データをViewに設定する｡
         val item = getItem(position)
         val holderOfCell = holder as ViewHolderOfCell
-        val thisView = holderOfCell.binding.cellText
+
 
         val backGround = if (item.isDoneAt(viewModel.dateEnList[page])){
             R.drawable.square_gold_gradient
         } else {
             R.drawable.square_silver_gradient
         }
+        val thisView = holderOfCell.binding.cellText
         thisView.text = item.title
         thisView.background = ResourcesCompat.getDrawable(
             thisView.resources, backGround, thisView.context.theme)
@@ -52,6 +54,7 @@ private object DiffCallback : DiffUtil.ItemCallback<ItemEntity>() {
         old: ItemEntity,
         new: ItemEntity
     ): Boolean {
+        Log.i("diffCallback","old ${old.id}  ")
         return old.id == new.id
     }
 

@@ -47,19 +47,19 @@ class MainActivity : AppCompatActivity() {
     }
     private fun wakeDetailFragment() {
         val transaction = supportFragmentManager.beginTransaction()
-        val detailFragmentOrNull =
+        val fragmentOrNull =
             supportFragmentManager.findFragmentByTag(DETAIL_WINDOW) as DetailFragment?
-        if (detailFragmentOrNull == null) {
+        if (fragmentOrNull == null) {
             // detailFragmentがまだインスタンス化されてなければ(初回起動)
             val newItemId = viewModel.liveList.value?.lastIndex ?: 1
             val fragment = DetailFragment.newInstance(newItemId)
             transaction.add(R.id.detail_container, fragment, DETAIL_WINDOW)
         } else {
             // detailFragmentがインスタンス化されていたら
-            if (detailFragmentOrNull.isVisible) {
-                transaction.hide(detailFragmentOrNull)
+            if (fragmentOrNull.isVisible) {
+                transaction.hide(fragmentOrNull)
             } else {
-                transaction.show(detailFragmentOrNull)
+                transaction.show(fragmentOrNull)
             }
         }
         transaction.commit()
