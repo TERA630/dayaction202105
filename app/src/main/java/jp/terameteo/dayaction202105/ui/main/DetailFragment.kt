@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import jp.terameteo.dayaction202105.DETAIL_WINDOW
@@ -39,8 +41,14 @@ class DetailFragment :Fragment(){
         binding.detailOkButton.setOnClickListener{
             val title = binding.editTitle.text.toString()
             val reward = binding.editReward.text.toString().toInt()
-            viewModel.appendItem(title,reward,"")
+            viewModel.appendItem(title,reward,"daily")
             navigateToMain()
+        }
+        binding.spinner.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+            if(hasFocus){
+                val imm = getSystemService(this.requireContext(),InputMethodManager::class.java) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken,InputMethodManager.HIDE_NOT_ALWAYS)
+            }
         }
         return binding.root
     }
