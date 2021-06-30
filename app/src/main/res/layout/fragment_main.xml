@@ -4,19 +4,15 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:orientation="vertical"
     tools:context=".MainActivity"
     tools:layout="@layout/fragment_main">
-
     <TextView
         android:id="@+id/dataShowing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:background="@drawable/square_green_gradient"
         android:textColor="@color/white"
-        android:textAlignment="center"
         android:textSize="@dimen/top_label"
         android:typeface="monospace"
         android:textStyle="bold"
