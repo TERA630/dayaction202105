@@ -1,6 +1,5 @@
 package jp.terameteo.dayaction202105.ui.main
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -51,18 +50,15 @@ class MainListAdaptor(
 
 private object DiffCallback : DiffUtil.ItemCallback<ItemEntity>() {
     override fun areItemsTheSame(
-        old: ItemEntity,
-        new: ItemEntity
-    ): Boolean {
-        Log.i("diffCallback","old ${old.id}  ")
+        old: ItemEntity, new: ItemEntity ): Boolean {
         return old.id == new.id
     }
-
     override fun areContentsTheSame(
-        old: ItemEntity,
-        new: ItemEntity
-    ): Boolean {
-        return old == new
+        old: ItemEntity, new: ItemEntity): Boolean {
+        val isSameAppearance = (old.title == new.title)
+                &&(old.finishedHistory == new.finishedHistory )
+                &&(old.category ==  new.category )
+         return isSameAppearance
     }
 
 }

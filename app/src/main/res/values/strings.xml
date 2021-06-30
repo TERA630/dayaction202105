@@ -11,20 +11,18 @@
     <string name="menu_actionOfTheDay">日ごとのTODOを追加</string>
     <string name="menu_customToGet">つけたい習慣を登録する</string>
     <string name="testReward">1200円</string>
-    <string name="testItem">気づきをメモする</string>
+    <string name="testItem">毎日のルーチン</string>
     <string name="testDate">2021年6月10日</string>
     <string name="testCategory">運動</string>
     <string name="append">追加</string>
 
-
     <string name="titleCaption">行うことのタイトル</string>
     <string name="rewardCaption">達成時の報酬</string>
-    <string-array
-            name="default_item_list">
+    <string-array name="default_item_list">
         <item>本日の記録;30;Daily;2021/6/10</item>
         <item>明日の一日の予定;30;Daily</item>
         <item>腕立て20;30;Daily;2021/6/10,2021/6/22,2021/6/23,2021/6/24</item>
-        <item>腹筋20;30;運動;2021/6/9,2021/6/13</item>
+        <item>腹筋20;30;運動;2021/6/9,2021/6/13,2021/6/28,2021/6/29</item>
         <item>腕立て2セット目;30;運動;2021/6/10,2021/6/11,2021/6/12,2021/6/22,2021/6/23</item>
         <item>勉強1ポモドーロ;100;運動;2021/6/8</item>
         <item>プログラム1ポモドーロ;30;その他;2021/6/11,2021/6/12,2021/6/13,2021/6/22,2021/6/23,2021/6/26,2021/6/27</item>
@@ -42,5 +40,7 @@
         <item>診断書クリア;30;仕事;2021/6/24</item>
         <item>病理所見クリア;30;仕事;2021/6/24,2021/6/26,2021/6/28</item>
         <item>サマリ-クリア;30;仕事;2021/6/28</item>
+        <item>外来見直し;50;仕事;2021/6/30</item>
+        <item>歯間ブラシ;30;Daily;2021／6／29</item>
         </string-array>
 </resources>

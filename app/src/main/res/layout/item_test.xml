@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<TextView
+    android:id="@+id/cellText"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/cellText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:padding="@dimen/item_padding"
-        android:checked = "true"
-        android:textColor="@color/darkBrown"
-        android:text="@string/testItem"
-
-        tools:background="@drawable/square_silver_gradient"
-        tools:text="@string/testItem" />
-</FrameLayout>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:padding="@dimen/item_padding"
+    android:textColor="@color/darkBrown"
+    android:text="@string/testItem"
+    tools:background="@drawable/square_silver_gradient"
+    tools:text="@string/testItem" />

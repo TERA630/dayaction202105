@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import jp.terameteo.dayaction202105.model.ItemEntity
 import jp.terameteo.dayaction202105.model.MyModel
 import jp.terameteo.dayaction202105.model.isDoneAt
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -45,7 +48,8 @@ class MainViewModel : ViewModel() {
         val list = List(liveList.value?.size ?:0 ){
             index -> liveList.safetyGet(index)
         }
-        viewModelScope.launch {
+        val viewModelBGScope=  CoroutineScope(Job().plus(viewModelScope.coroutineContext).plus(Dispatchers.IO))
+        viewModelBGScope.launch {
             for(i in list.indices) {
                 myModel.insertItem(list[i])
             }
@@ -95,3 +99,14 @@ fun MutableLiveData<List<ItemEntity>>.safetyGet(position:Int): ItemEntity {
 //  VMはViewへの参照は持つべきでない｡ ActivityContext の参照を保持するべきでない｡
 //  ユーザーのViewへのActionを受け取り､Modelに通知する｡　Commands
 //  ViewがModelのメンバを直接操作するのは推奨されない｡
+
+// CoroutineScope：CoroutineをLaunchする情報をもつClass
+// CoroutineContextを持つ｡
+// CoroutineContext　Job　CoroutineDispatcher　CoroutineExceptionHandlerなどををもつ
+//　Job：LaunchされたCoroutineをキャンセルできるClass　Launchごとに割り当てられる｡
+//  各Coroutineの親子関係も制御できる｡
+//　CoroutineDispatcher：Coroutineを動かすThreadを指定できる｡
+//　指定がなければDispatcher.Defaultが追加される｡　ほかにはDispatcher.Mail　.IOなど
+
+
+
