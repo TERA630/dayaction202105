@@ -16,14 +16,14 @@ import jp.terameteo.dayaction202105.databinding.FragmentDetailBinding
 import jp.terameteo.dayaction202105.model.ERROR_CATEGORY
 
 const val ARG_ITEM_ID= "argumentItemId"
-class DetailFragment :Fragment(){
+class DetailFragment :Fragment(){ // Fragmentはデフォルトのコンストラクタを使うことを要求されている｡
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentDetailBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
-
+//        イベントハンドルの設定
         viewModel.currentCategory.observe(viewLifecycleOwner){
             val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
             val categoryList = viewModel.currentCategory.value ?: listOf(ERROR_CATEGORY)
@@ -55,7 +55,7 @@ class DetailFragment :Fragment(){
         parentFragmentManager.findFragmentByTag(DETAIL_WINDOW)?.let{
             transaction.hide(it)
             transaction.commit()
-        }
+        }//このフラグメントを閉じる｡
     }
     companion object {
         @JvmStatic

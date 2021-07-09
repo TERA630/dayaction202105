@@ -6,7 +6,6 @@ import androidx.room.*
 @Dao
 interface ItemCollectionDAO {
     /** 全データ取得 */
-
     @Query("SELECT * FROM collection_item")
     fun getAll(): LiveData<List<ItemEntity>>
     /** データ更新 */
