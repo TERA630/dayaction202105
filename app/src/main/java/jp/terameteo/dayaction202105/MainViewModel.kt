@@ -22,6 +22,7 @@ class MainViewModel : ViewModel() {
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = MediatorLiveData<List<String>>()
 
+
     fun initialize(_context:Context) {
         myModel.initializeDB(_context)
         for (i in 0..9) {
@@ -48,7 +49,8 @@ class MainViewModel : ViewModel() {
         val list = List(liveList.value?.size ?:0 ){
             index -> liveList.safetyGet(index)
         }
-        val viewModelBGScope=  CoroutineScope(Job().plus(viewModelScope.coroutineContext).plus(Dispatchers.IO))
+        val job = Job() + viewModelScope.coroutineContext + Dispatchers.IO
+        val viewModelBGScope=  CoroutineScope(job)
         viewModelBGScope.launch {
             for(i in list.indices) {
                 myModel.insertItem(list[i])
@@ -77,6 +79,8 @@ class MainViewModel : ViewModel() {
         list.add(newItem)
         liveList.postValue(list)
     }
+
+
 }
 
 // LiveDataの拡張関数 Static method

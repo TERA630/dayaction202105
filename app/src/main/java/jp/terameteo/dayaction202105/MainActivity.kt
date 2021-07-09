@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.terameteo.dayaction202105.databinding.ActivityMainBinding
-import jp.terameteo.dayaction202105.ui.main.DetailFragment
 import jp.terameteo.dayaction202105.ui.main.MainFragmentStateAdapter
 
 // TODO ROOM 実装
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         // アイテム追加の準備
         val fab: FloatingActionButton = binding.fab
         fab.setOnClickListener {
-            wakeDetailFragment()
+
         }
         viewModel.currentRewardStr.observe(this) {
             rewardLabel.text = it
@@ -45,25 +44,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.stateSave(this)
         super.onPause()
     }
-    private fun wakeDetailFragment() {
-        val transaction = supportFragmentManager.beginTransaction()
-        val fragmentOrNull =
-            supportFragmentManager.findFragmentByTag(DETAIL_WINDOW) as DetailFragment?
-        if (fragmentOrNull == null) {
-            // detailFragmentがまだインスタンス化されてなければ(初回起動)
-            val newItemId = viewModel.liveList.value?.lastIndex ?: 1
-            val fragment = DetailFragment.newInstance(newItemId)
-            transaction.add(R.id.detail_container, fragment, DETAIL_WINDOW)
-        } else {
-            // detailFragmentがインスタンス化されていたら
-            if (fragmentOrNull.isVisible) {
-                transaction.hide(fragmentOrNull)
-            } else {
-                transaction.show(fragmentOrNull)
-            }
-        }
-        transaction.commit()
-    }
+
 }
 //　Activityのみでアプリケーションを完結させようとすると､
 //　端末の回転時やアプリケーションの切り替え時に表示状態(State)の保持に苦労する｡
