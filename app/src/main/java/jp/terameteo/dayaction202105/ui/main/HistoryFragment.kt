@@ -16,7 +16,7 @@ class HistoryFragment:Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        binding.historyGrid.layoutManager = GridLayoutManager(binding.root.context,5)
+        binding.historyGrid.layoutManager = GridLayoutManager(binding.root.context,8)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

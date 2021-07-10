@@ -23,7 +23,8 @@ class DetailFragment :Fragment(){ // Fragmentはデフォルトのコンスト�
         savedInstanceState: Bundle?): View {
 
         binding =  FragmentDetailBinding.inflate(inflater, container, false)
-//        イベントハンドルの設定
+
+        //　データ更新時の応答設定
         viewModel.currentCategory.observe(viewLifecycleOwner){
             val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
             val categoryList = viewModel.currentCategory.value ?: listOf(ERROR_CATEGORY)
@@ -32,6 +33,7 @@ class DetailFragment :Fragment(){ // Fragmentはデフォルトのコンスト�
             }
             binding.spinner.adapter = arrayAdapter
         }
+        // Commandへの応答設定
         binding.detailCancelButton.setOnClickListener {
             navigateToMain()
         }

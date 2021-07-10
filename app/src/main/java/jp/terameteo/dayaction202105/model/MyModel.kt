@@ -38,7 +38,11 @@ class MyModel {
         val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         return  SimpleDateFormat("yyyy/M/dd",Locale.ENGLISH).format(javaUtilDate)
     }
-
+    fun getDayStringShort(backDate: Int):String{
+        val date = LocalDate.now().minusDays(backDate.toLong())
+        val javaUtilDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        return  SimpleDateFormat("M/dd", Locale.ENGLISH).format(javaUtilDate)
+    }
     private fun makeItemListFromResource(_context: Context): List<ItemEntity> {
         val itemsFromResource = _context.resources.getStringArray(R.array.default_item_list)
         return List(itemsFromResource.size) { index ->

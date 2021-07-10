@@ -1,17 +1,23 @@
 package jp.terameteo.dayaction202105
 
+import com.google.common.truth.Truth
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+    @Test
+    fun division_isCorrect(){
+        val result:Int = 41 / 8
+        Truth.assertThat(result).isEqualTo(5)
+        val modResult = 41 % 8
+        Truth.assertThat(modResult).isEqualTo(1)
+    }
 }
+
+// Hamcrest AssertJ  Truth アサーションライブラリ
+// AssertJ AndroidはDiscontinue
+//　

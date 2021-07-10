@@ -18,10 +18,10 @@ class MainViewModel : ViewModel() {
     val liveList = MutableLiveData<List<ItemEntity>>()
     val dateJpList = MutableList(10){"1970年1月1日(木)"}
     val dateEnList = MutableList(10){"1970/1/1"}
+    val dateShortList = MutableList(7){"1/1"}
     val currentReward:MutableLiveData<Int> = MutableLiveData(0)
     val currentRewardStr = MediatorLiveData<String>()
     val currentCategory = MediatorLiveData<List<String>>()
-
 
     fun initialize(_context:Context) {
         myModel.initializeDB(_context)
@@ -30,6 +30,9 @@ class MainViewModel : ViewModel() {
         }
         for (i in 0..9) {
             dateJpList[i] = myModel.getDayStringJp(9 - i)
+        }
+        for (i in 0..6){
+            dateShortList[i] = myModel.getDayStringShort(6 - i)
         }
         currentReward.postValue(myModel.loadRewardFromPreference(_context))
         currentRewardStr.addSource(currentReward) { value -> currentRewardStr.postValue("$value　円") }
