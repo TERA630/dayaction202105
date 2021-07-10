@@ -16,9 +16,12 @@ class HistoryFragment:Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        binding.historyGrid.layoutManager = GridLayoutManager(binding.root.context,8)
+        binding.historyGrid.layoutManager = GridLayoutManager(binding.root.context,8,GridLayoutManager.HORIZONTAL,false)
+        binding.historyGrid.setHasFixedSize(true)
+        binding.historyGrid.adapter = HistoryAdaptor(viewModel)
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+
+        return binding.root
     }
     companion object {
         @JvmStatic
